@@ -7,7 +7,7 @@
     "css": "sass -w src/public/sass:src/public/css",
     "js": "tsc -w src/public/ts/*.ts --outDir src/public/js",
     "dev": "tsnd --inspect -- src/index.ts",
-    "db:reset": "psql -d chat-app < src/db/migrations/create.sql && psql -d chat-app < src/db/seed.sql"
+    "db:reset": "psql -d appchat < src/db/migrations/create.sql && psql -d appchat < src/db/seed.sql"
   },
   "keywords": [],
   "author": "",
