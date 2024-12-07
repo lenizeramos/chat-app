@@ -27,16 +27,6 @@ body, input {
   font-family: "Poppins", sans-serif;
 }
 
-.post-image {
-  width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-}
-
-.heart:hover {
-  color: #9A11BF;
-}
-
 .btn {
   background-color: #9A11BF;
 }

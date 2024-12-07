@@ -1,16 +1,6 @@
 @import "./navbar";
 @import "./base";
 
-.post-image {
-  width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-}
-
-.heart:hover {
-  color: $secondary-color;
-}
-
 .btn {
   background-color: $secondary-color;
   &:hover {

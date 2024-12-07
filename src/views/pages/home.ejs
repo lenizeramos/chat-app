@@ -10,6 +10,11 @@
 
     <div class="container-fluid vh-90 d-flex">
       <div class="chat-list col-4 border-end p-3">
+        <form action="/chat/direct" method="post" id="searchForm">
+          <input type="text" name="searchUserInput" id="searchUserInput" required/>
+          <button type="submit">Search User</button>
+        </form>
+
         <h5 class="mb-3">Chats</h5>
         <ul class="list-group chat-items">
           <li

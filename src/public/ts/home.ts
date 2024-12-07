@@ -2,6 +2,32 @@ declare const io: any;
 declare const userEmail: string;
 
 $(() => {
+  const postData = (url: string, method: string, data?: any) => {
+    $.ajax({
+      url: url,
+      method: method,
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      success: function () {
+        window.location.reload();
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: ", status, error, xhr.responseText);
+      },
+    });
+  };
+  $("#searchForm").on("submit", (e) => {
+    e.preventDefault();
+    const searchedUserId = Number($("#searchUserInput").val())
+    if (searchedUserId) {
+      postData("/chat/direct", "POST", { id: searchedUserId });
+    } /* else {
+      $("#error-message")
+        .removeClass("d-none")
+        .html("Please enter a todo description!");
+    } */
+  });
+
   const socket = io({ query: { userEmail } });
 
   let currentRoom: string | null = null;

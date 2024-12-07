@@ -1,4 +1,29 @@
 $(function () {
+    var postData = function (url, method, data) {
+        $.ajax({
+            url: url,
+            method: method,
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function () {
+                window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log("Error: ", status, error, xhr.responseText);
+            },
+        });
+    };
+    $("#searchForm").on("submit", function (e) {
+        e.preventDefault();
+        var searchedUserId = Number($("#searchUserInput").val());
+        if (searchedUserId) {
+            postData("/chat/direct", "POST", { id: searchedUserId });
+        } /* else {
+          $("#error-message")
+            .removeClass("d-none")
+            .html("Please enter a todo description!");
+        } */
+    });
     var socket = io({ query: { userEmail: userEmail } });
     var currentRoom = null;
     var $messageInput = $("#messageInput");
