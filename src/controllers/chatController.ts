@@ -1,28 +1,49 @@
 import { Response, Request, RequestHandler, NextFunction } from "express";
 import { prisma } from "../routes/authRoutes";
-import { addChatParticipant, createChat } from "../models/chatModel";
+import {
+  addChatParticipant,
+  createChat,
+  doesDirectExist,
+  getUserById,
+} from "../models/chatModel";
 
 export const createDirect: RequestHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const chatBody = req.body;
+  const directUserId = req.body.id;
   try {
-    if (!chatBody.id) {
-      return res.status(400).json({ error: "Field is required." });
-    }
     if (!req.session.user) {
       return res.status(400).json({ error: "User not logged in." });
     }
-    const chat = await createChat();
 
-    await addChatParticipant(chat.id, req.session.user?.id);
-    await addChatParticipant(chat.id, chatBody.id);
+    if (!directUserId) {
+      return res.status(400).json({ error: "Field is required." });
+    }
+
+    if (directUserId === req.session.user?.id) {
+      return res
+        .status(400)
+        .json({ error: "Cannot create a chat with yourself." });
+    }
+
+    const directUser = await getUserById(directUserId);
+    if (!directUser) {
+      return res.status(500).json({ error: "Internal error." });
+    }
+
+    if (await doesDirectExist(directUserId, req.session.user?.id)) {
+    } else {
+      const chat = await createChat(directUser?.username);
+
+      await addChatParticipant(chat.id, req.session.user?.id);
+      await addChatParticipant(chat.id, directUserId);
+    }
 
     res.redirect("/");
     //res.render("pages/home", { user: req.session.user });
   } catch (error) {
-    res.json({ error: "Direct message already exist!" });
+    res.status(400).json({ error: error });
   }
 };

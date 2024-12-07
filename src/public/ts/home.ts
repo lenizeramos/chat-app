@@ -24,7 +24,7 @@ $(() => {
     } /* else {
       $("#error-message")
         .removeClass("d-none")
-        .html("Please enter a todo description!");
+        .html("Please enter an username!");
     } */
   });
 
@@ -32,22 +32,27 @@ $(() => {
 
   let currentRoom: string | null = null;
 
-  const $messageInput = $("#messageInput") as JQuery<HTMLInputElement>;
-  const $sendButton = $("#sendButton");
-  const $messagesDiv = $("#messages");
-  const $roomSelect = $("#roomSelect") as JQuery<HTMLSelectElement>;
-  const $joinRoomButton = $("#joinRoomButton");
-  const $leaveRoomButton = $("#leaveRoomButton");
-  const $currentRoomDisplay = $("#currentRoom");
+  const $messageInput = $(".messageInput") as JQuery<HTMLInputElement>;
+  const $sendButton = $(".sendButton");
+  const $messagesDiv = $(".messages");
+  const $roomSelect = $(".roomSelect") as JQuery<HTMLSelectElement>;
+  const $joinRoomButton = $(".joinRoomButton");
+  const $leaveRoomButton = $(".leaveRoomButton");
+  const $currentRoomDisplay = $(".currentRoom");
 
-  $joinRoomButton.on("click", () => {
-    const room = $roomSelect.val() as string;
+  $joinRoomButton.on("click", (e) => {
+    const target = $(e.currentTarget);
+    const room = target.data("chat-id");
+    const chatName = target.data("chat-name");
+    console.log(room);
+    
+    //const room = $roomSelect.val() as string;
     if (currentRoom) {
       socket.emit("leaveRoom", currentRoom);
     }
     socket.emit("joinRoom", room);
     currentRoom = room;
-    $currentRoomDisplay.text(room);
+    $currentRoomDisplay.text(chatName);
     $messagesDiv.empty();
   });
 

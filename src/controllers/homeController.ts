@@ -2,16 +2,17 @@ import { Response, Request } from "express";
 import { prisma } from "../routes/authRoutes";
 
 export const getIndex = async (req: Request, res: Response) => {
-  /* try {
-    const posts = await prisma.post.findMany({
-      include: { user: true },
-      orderBy: { createdAt: "desc" },
+  try {
+    const chats = await prisma.chatParticipant.findMany({
+      where: {userId: req.session.user?.id},
+      include: { user: true, chat: true },
+      orderBy: { joinedAt: "desc" },
     });
-    res.render("pages/home", { user: req.session.user, posts, error: null });
+    //console.log(chats);
+    
+    res.render("pages/home", { user: req.session.user, chats, error: null });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Couldn't get feed");
-  } */
-
-    res.render("pages/home", { user: req.session.user });
+    res.status(500).send("Couldn't get home");
+  }
 };

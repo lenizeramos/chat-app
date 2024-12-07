@@ -21,26 +21,30 @@ $(function () {
         } /* else {
           $("#error-message")
             .removeClass("d-none")
-            .html("Please enter a todo description!");
+            .html("Please enter an username!");
         } */
     });
     var socket = io({ query: { userEmail: userEmail } });
     var currentRoom = null;
-    var $messageInput = $("#messageInput");
-    var $sendButton = $("#sendButton");
-    var $messagesDiv = $("#messages");
-    var $roomSelect = $("#roomSelect");
-    var $joinRoomButton = $("#joinRoomButton");
-    var $leaveRoomButton = $("#leaveRoomButton");
-    var $currentRoomDisplay = $("#currentRoom");
-    $joinRoomButton.on("click", function () {
-        var room = $roomSelect.val();
+    var $messageInput = $(".messageInput");
+    var $sendButton = $(".sendButton");
+    var $messagesDiv = $(".messages");
+    var $roomSelect = $(".roomSelect");
+    var $joinRoomButton = $(".joinRoomButton");
+    var $leaveRoomButton = $(".leaveRoomButton");
+    var $currentRoomDisplay = $(".currentRoom");
+    $joinRoomButton.on("click", function (e) {
+        var target = $(e.currentTarget);
+        var room = target.data("chat-id");
+        var chatName = target.data("chat-name");
+        console.log(room);
+        //const room = $roomSelect.val() as string;
         if (currentRoom) {
             socket.emit("leaveRoom", currentRoom);
         }
         socket.emit("joinRoom", room);
         currentRoom = room;
-        $currentRoomDisplay.text(room);
+        $currentRoomDisplay.text(chatName);
         $messagesDiv.empty();
     });
     $leaveRoomButton.on("click", function () {
