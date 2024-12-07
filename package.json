@@ -1,0 +1,45 @@
+{
+  "name": "chat-app-final-project-wad302-final-groupsb",
+  "version": "1.0.0",
+  "description": "This project involves building a real-time chat application using `Node.js`. The backend will utilize either `PostgreSQL` or `MongoDB` as the database. The goal is to create a fully functional chat application that allows multiple users to join chat rooms, exchange messages, and view chat history.",
+  "main": "index.js",
+  "scripts": {
+    "css": "sass -w src/public/sass:src/public/css",
+    "js": "tsc -w src/public/ts/*.ts --outDir src/public/js",
+    "dev": "tsnd --inspect -- src/index.ts",
+    "db:reset": "psql -d chat-app < src/db/migrations/create.sql && psql -d chat-app < src/db/seed.sql"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.0.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.12.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
+    "@types/express-ejs-layouts": "^2.5.4",
+    "@types/express-session": "^1.18.0",
+    "@types/jquery": "^3.5.32",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.10.1",
+    "@types/pg": "^8.11.6",
+    "@types/socket.io-client": "^3.0.0",
+    "prisma": "^6.0.0",
+    "sass": "^1.77.6",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
