@@ -1,5 +1,6 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+/* body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
 }
 
 #form {
@@ -10,11 +11,14 @@ body {
   border-radius: 20px;
 }
 
-#messages li {
-  padding: 0.5rem 1rem;
-}
-#messages li:nth-child(odd) {
-  background-color: #f8f9fa;
-}
+#messages {
+  li {
+    padding: 0.5rem 1rem;
+
+    &:nth-child(odd) {
+      background-color: #f8f9fa;
+    }
+  }
+} */
 
 /*# sourceMappingURL=chat.css.map */

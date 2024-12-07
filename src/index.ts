@@ -10,7 +10,6 @@ const userSockets: { [email: string]: string } = {}; // Map user to their socket
 
 const io = new Server(server);
 
-// Socket.IO setup
 io.on("connection", (socket) => {
   const userEmail = socket.handshake.query.userEmail as string;
   console.log("===> in server.js : EMAIL = > ", userEmail);
