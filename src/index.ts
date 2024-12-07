@@ -1,16 +1,18 @@
 import { app } from "./app";
 import { HOST, PORT } from "./env";
 import { createServer } from "http";
-import { Server } from "socket.io";
+//import { Server } from "socket.io";
+import { initSocket } from "./sockets/socket";
 
 const server = createServer(app);
 
-const roomMessages: { [key: string]: { id: string; message: string }[] } = {};
-const userSockets: { [email: string]: string } = {}; // Map user to their sockets id
+//const roomMessages: { [key: string]: { id: string; message: string }[] } = {};
+//const userSockets: { [email: string]: string } = {}; // Map user to their sockets id
 
-const io = new Server(server);
+//const io = new Server(server);
+const io = initSocket(server);
 
-io.on("connection", (socket) => {
+/* io.on("connection", (socket) => {
   const userEmail = socket.handshake.query.userEmail as string;
   console.log("===> in server.js : EMAIL = > ", userEmail);
 
@@ -49,7 +51,7 @@ io.on("connection", (socket) => {
     delete userSockets[userEmail];
     console.log(`${userEmail} disconnected with Socketid ${socket.id}`);
   });
-});
+}); */
 
 server.listen(PORT, () => {
   console.log(`[server]: Listening at http://${HOST}:${PORT}`);

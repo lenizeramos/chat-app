@@ -24,12 +24,11 @@ $(function () {
             .html("Please enter an username!");
         } */
     });
-    var socket = io({ query: { userEmail: userEmail } });
+    var socket = io({ query: { username: username } });
     var currentRoom = null;
     var $messageInput = $(".messageInput");
     var $sendButton = $(".sendButton");
     var $messagesDiv = $(".messages");
-    var $roomSelect = $(".roomSelect");
     var $joinRoomButton = $(".joinRoomButton");
     var $leaveRoomButton = $(".leaveRoomButton");
     var $currentRoomDisplay = $(".currentRoom");

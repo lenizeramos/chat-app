@@ -1,5 +1,5 @@
 declare const io: any;
-declare const userEmail: string;
+declare const username: string;
 
 $(() => {
   const postData = (url: string, method: string, data?: any) => {
@@ -28,14 +28,13 @@ $(() => {
     } */
   });
 
-  const socket = io({ query: { userEmail } });
+  const socket = io({ query: { username } });
 
   let currentRoom: string | null = null;
 
   const $messageInput = $(".messageInput") as JQuery<HTMLInputElement>;
   const $sendButton = $(".sendButton");
   const $messagesDiv = $(".messages");
-  const $roomSelect = $(".roomSelect") as JQuery<HTMLSelectElement>;
   const $joinRoomButton = $(".joinRoomButton");
   const $leaveRoomButton = $(".leaveRoomButton");
   const $currentRoomDisplay = $(".currentRoom");

@@ -1,4 +1,4 @@
-import { prisma } from "../routes/authRoutes";
+import { prisma } from "../prisma";
 //import { Chat } from "@prisma/client";
 
 export const createChat = async (name: string) => {

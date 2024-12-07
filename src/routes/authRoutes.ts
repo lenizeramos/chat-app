@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
+//import { PrismaClient } from "@prisma/client";
 import {
   getAuth,
   loginUser,
@@ -8,7 +8,7 @@ import {
 } from "../controllers/authController";
 import { isSessionInactive } from "../middlware/session";
 
-export const prisma = new PrismaClient();
+//
 
 export const router = Router();
 

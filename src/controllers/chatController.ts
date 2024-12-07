@@ -1,5 +1,4 @@
 import { Response, Request, RequestHandler, NextFunction } from "express";
-import { prisma } from "../routes/authRoutes";
 import {
   addChatParticipant,
   createChat,
