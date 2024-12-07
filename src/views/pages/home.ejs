@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("../partials/head.ejs", {title: "home", styles:
+    "/css/home.css"}) %>
+  </head>
+
+  <body>
+    <header><%- include("../partials/header.ejs", {page: "home"}) %></header>
+
+    <div class="container-fluid vh-100 d-flex">
+      <div class="chat-list col-4 border-end p-3">
+        <h5 class="mb-3">Chats</h5>
+        <ul class="list-group chat-items">
+          <li
+            class="list-group-item d-flex align-items-center chat-item"
+            data-chat-id=""
+          >
+            <div
+              class="avatar rounded-circle bg-primary text-white text-center me-3"
+              style="width: 40px; height: 40px"
+            ></div>
+            <div>
+              <strong></strong>
+              <p class="text-muted small m-0"></p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="chat-area col-8 d-flex flex-column">
+        <div class="chat-header border-bottom p-3">
+          <h5 class="m-0">Current room: <span id="currentRoom">X</span></h5>
+        </div>
+
+        <div>
+          <select id="roomSelect" class="border p-2 mb-4">
+            <option value="room1">Room 1</option>
+            <option value="room2">Room 2</option>
+          </select>
+          <button id="joinRoomButton" class="bg-blue-500 text-white p-2">
+            Join Room
+          </button>
+          <button id="leaveRoomButton" class="bg-red-500 text-white p-2 ml-2">
+            Leave Room
+          </button>
+        </div>
+        <div class="chat-messages flex-grow-1 p-3 overflow-auto">
+          <div class="message mb-3">
+            <div class="message-text p-2 rounded" ></div>
+            <small class="text-muted" id="messages"></small>
+          </div>
+        </div>
+        
+        <div id="messageForm" class="p-3 border-top d-flex align-items-center">
+          <input
+            type="text"
+            id="messageInput"
+            class="form-control me-2"
+            placeholder="Type a message..."
+          />
+          <button id="sendButton" class="btn btn-primary">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const userEmail = "<%= user.username %>";
+    </script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script defer src="/js/home.js"></script>
+  </body>
+</html>

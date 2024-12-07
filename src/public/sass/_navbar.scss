@@ -1,0 +1,20 @@
+@import "./_variables";
+
+nav {
+  background-color: $secondary-color;
+  span {
+    color: $text-header-color !important;
+    text-align: center;
+  }
+  a {
+    color: $text-header-color !important;
+    text-align: center;
+  }
+  .logo {
+    font-size: 1.8rem;
+    font-weight: bolder;
+    color: $text-header-color !important;
+    text-decoration: none;
+  }
+  
+}
