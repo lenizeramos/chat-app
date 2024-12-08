@@ -63,8 +63,8 @@ $(function () {
     });
     socket.on("previousMessages", function (messages) {
         messages.forEach(function (_a) {
-            var id = _a.id, message = _a.message;
-            var $messageElement = $("<div>").text("".concat(id, ": ").concat(message));
+            var username = _a.username, content = _a.content;
+            var $messageElement = $("<div>").text("".concat(username, ": ").concat(content));
             $messagesDiv.append($messageElement);
         });
     });

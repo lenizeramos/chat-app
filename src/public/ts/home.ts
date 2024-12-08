@@ -74,9 +74,9 @@ $(() => {
 
   socket.on(
     "previousMessages",
-    (messages: { id: string; message: string }[]) => {
-      messages.forEach(({ id, message }) => {
-        const $messageElement = $("<div>").text(`${id}: ${message}`);
+    (messages: { username: string; content: string }[]) => {
+      messages.forEach(({ username, content }) => {
+        const $messageElement = $("<div>").text(`${username}: ${content}`);
         $messagesDiv.append($messageElement);
       });
     }

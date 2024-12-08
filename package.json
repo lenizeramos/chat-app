@@ -9,6 +9,9 @@
     "dev": "tsnd --inspect -- src/index.ts",
     "db:reset": "psql -d appchat < src/db/migrations/create.sql && psql -d appchat < src/db/seed.sql"
   },
+  "prisma": {
+    "seed": "ts-node --transpile-only prisma/seed.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
