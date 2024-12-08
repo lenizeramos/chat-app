@@ -41,7 +41,6 @@ export const createDirect: RequestHandler = async (
     }
 
     res.redirect("/");
-    //res.render("pages/home", { user: req.session.user });
   } catch (error) {
     res.status(400).json({ error: error });
   }

@@ -18,7 +18,7 @@ $(() => {
   };
   $("#searchForm").on("submit", (e) => {
     e.preventDefault();
-    const searchedUserId = Number($("#searchUserInput").val())
+    const searchedUserId = Number($("#searchUserInput").val());
     if (searchedUserId) {
       postData("/chat/direct", "POST", { id: searchedUserId });
     } /* else {
@@ -44,8 +44,7 @@ $(() => {
     const room = target.data("chat-id");
     const chatName = target.data("chat-name");
     console.log(room);
-    
-    //const room = $roomSelect.val() as string;
+
     if (currentRoom) {
       socket.emit("leaveRoom", currentRoom);
     }

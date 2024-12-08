@@ -30,7 +30,7 @@ async function main() {
     create: {
       username: "Joan",
       email: "joan@joan.com",
-      password: await bcrypt.hash("joan*&", 10),
+      password: await bcrypt.hash("joan*", 10),
     },
   });
   const user4 = await prisma.user.upsert({
@@ -39,7 +39,7 @@ async function main() {
     create: {
       username: "Julio",
       email: "julio@julio.com",
-      password: await bcrypt.hash("julio*&", 10),
+      password: await bcrypt.hash("julio*", 10),
     },
   });
   const user5 = await prisma.user.upsert({
@@ -48,7 +48,7 @@ async function main() {
     create: {
       username: "Awshaf",
       email: "awshaf@awshaf.com",
-      password: await bcrypt.hash("awshaf*&", 10),
+      password: await bcrypt.hash("awshaf*", 10),
     },
   });
 

@@ -8,11 +8,11 @@ export const initSocket = (server: HttpServer) => {
 
   io.on("connection", (socket) => {
     const username = socket.handshake.query.username as string;
-    console.log("===> in server.js : username = > ", username);
+    //console.log("===> in server.js : username = > ", username);
 
     socket.on("joinRoom", async (room) => {
       socket.join(room);
-      console.log(`User ${socket.id} joined room: ${room}`);
+      //console.log(`User ${socket.id} joined room: ${room}`);
       const messages = await getMessageByChat(room);
       if (messages) {
         socket.emit(
@@ -28,7 +28,7 @@ export const initSocket = (server: HttpServer) => {
 
     socket.on("leaveRoom", (room) => {
       socket.leave(room);
-      console.log(`User ${socket.id} left room: ${room}`);
+      //console.log(`User ${socket.id} left room: ${room}`);
     });
 
     socket.on("message", async ({ room, message }) => {
@@ -41,7 +41,7 @@ export const initSocket = (server: HttpServer) => {
     });
 
     socket.on("disconnect", () => {
-      console.log(`${username} disconnected with Socketid ${socket.id}`);
+      //console.log(`${username} disconnected with Socketid ${socket.id}`);
     });
   });
 

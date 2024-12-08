@@ -37,7 +37,6 @@ $(function () {
         var room = target.data("chat-id");
         var chatName = target.data("chat-name");
         console.log(room);
-        //const room = $roomSelect.val() as string;
         if (currentRoom) {
             socket.emit("leaveRoom", currentRoom);
         }
