@@ -10,15 +10,19 @@
 
     <div class="container-fluid vh-90 d-flex">
       <div class="chat-list col-4 border-end p-3">
-        <form action="/chat/direct" method="post" id="searchForm">
-          <input
-            type="text"
-            name="searchUserInput"
-            id="searchUserInput"
-            required
-          />
-          <button type="submit">Search User</button>
-        </form>
+        <div class="search-container position-relative mb-3">
+          <form action="/chat/direct" method="post" id="searchForm">
+            <input
+              type="text"
+              name="searchUserInput"
+              id="searchUserInput"
+              class="form-control"
+              placeholder="Search users..."
+              autocomplete="off"
+            />
+            <div id="searchResults" class="position-absolute w-100 bg-white border rounded shadow-sm d-none" style="z-index: 1000;"></div>
+          </form>
+        </div>
         <h5 class="mb-3">Chats</h5>
 
         <div>

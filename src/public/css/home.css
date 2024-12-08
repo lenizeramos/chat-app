@@ -1,37 +1,25 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
-nav {
-  background-color: #9A11BF;
-}
-nav span {
-  color: white !important;
-  text-align: center;
-}
-nav a {
-  color: white !important;
-  text-align: center;
-}
-nav .logo {
-  font-size: 1.8rem;
-  font-weight: bolder;
-  color: white !important;
-  text-decoration: none;
+.search-result {
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.search-result:hover {
+    background-color: #f8f9fa;
 }
 
-body, input {
-  font-family: "Poppins", sans-serif;
+#searchResults {
+    max-height: 200px;
+    overflow-y: auto;
+    top: 100%;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    border-radius: 0 0 0.25rem 0.25rem;
 }
 
-.btn {
-  background-color: #9A11BF;
-}
-.btn:hover {
-  background-color: #087F8C;
+.search-container {
+    position: relative;
 }
 
-/*# sourceMappingURL=home.css.map */
+#searchUserInput:focus + #searchResults:not(.d-none) {
+    display: block;
+}
