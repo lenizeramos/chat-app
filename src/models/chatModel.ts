@@ -9,7 +9,7 @@ export const getUserById = async (id: number) => {
 };
 
 export const addChatParticipant = async (chatId: number, userId: number) => {
-  console.log(userId, "UserIdModel");
+  // console.log(userId, "UserIdModel");
 
   return await prisma.chatParticipant.create({ data: { chatId, userId } });
 };
@@ -25,10 +25,40 @@ export const doesDirectExist = async (user1Id: number, user2Id: number) => {
       },
     },
   });
-  console.log(existingChat);
+  //console.log(existingChat);
 
   if (existingChat) {
     return true;
   }
   return false;
+};
+
+export const getChatByUserId = async (userId: any) => {
+  let chats = await prisma.chat.findMany({
+    where: {
+      participants: {
+        some: {
+          userId: userId,
+        },
+      },
+    },
+    include: {
+      participants: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+
+  chats = chats.map((chat) => {
+    if (!chat.isGroup) {
+      chat.name =
+        chat.participants.find((participant) => userId != participant.userId)
+          ?.user.username || "No name";
+    }
+    return chat;
+  });
+
+  return chats;
 };
