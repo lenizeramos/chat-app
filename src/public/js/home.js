@@ -49,6 +49,7 @@ $(function () {
             });
         }, 300);
     });
+    // Handle search result selection
     $(document).on("click", ".search-result", function () {
         var userId = $(this).data("user-id");
         var username = $(this).data("username");
@@ -57,6 +58,7 @@ $(function () {
         $searchResults.addClass("d-none");
         postData("/chat/direct", "POST", { id: userId });
     });
+    // Handle search form submission
     $("#searchForm").on("submit", function (e) {
         e.preventDefault();
         if (selectedUserId) {
@@ -70,7 +72,7 @@ $(function () {
             $searchResults.addClass("d-none");
         }
     });
-    var socket = io({ query: { username: username } });
+    var socket = io({ query: { username: usernameLogged } });
     var currentRoom = null;
     var $messageInput = $(".messageInput");
     var $sendButton = $(".sendButton");
@@ -149,6 +151,7 @@ $(function () {
             .append($("<span>").text(message));
         $messageElement.append($avatar).append($messageContent);
         $messagesDiv.append($messageElement);
+        // Scroll to bottom after adding new message
         $messagesDiv.scrollTop($messagesDiv[0].scrollHeight);
     });
 });

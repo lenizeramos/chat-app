@@ -157,4 +157,8 @@ body, input {
   background-color: rgba(135, 207, 235, 0.295);
 }
 
+.paperclip {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=home.css.map */
