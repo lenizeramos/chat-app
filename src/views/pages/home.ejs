@@ -30,7 +30,7 @@
             <% chats.forEach(chat => { %>
             <li
               class="list-group-item d-flex align-items-center chat-item joinRoomButton"
-              data-chat-id="<%= chat.chat.id %>" data-chat-name="<%= chat.chat.name %>"
+              data-chat-id="<%= chat.id %>" data-chat-name="<%= chat.name %>"
             >
               <div
                 class="avatar rounded-circle text-white text-center me-3 d-flex align-items-center justify-content-center"
@@ -41,7 +41,7 @@
                 <% } %>
               </div>
               <div>
-                <strong><%= chat.chat.name %></strong>
+                <strong><%= chat.name %></strong>
                 <p class="text-muted small m-0"></p>
               </div>
             </li>
