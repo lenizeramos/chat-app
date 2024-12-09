@@ -30,7 +30,8 @@
             <% chats.forEach(chat => { %>
             <li
               class="list-group-item d-flex align-items-center chat-item joinRoomButton"
-              data-chat-id="<%= chat.id %>" data-chat-name="<%= chat.name %>"
+              data-chat-id="<%= chat.id %>"
+              data-chat-name="<%= chat.name %>"
             >
               <div
                 class="avatar rounded-circle text-white text-center me-3 d-flex align-items-center justify-content-center"
@@ -66,18 +67,30 @@
         </div>
 
         <div class="messageForm p-3 border-top d-flex align-items-center">
-          <input
+          <textarea
             type="text"
             class="messageInput form-control me-2"
             placeholder="Type a message..."
-          />
+          ></textarea>
+          <div class="m-3">
+            <label for="attach-file" style="cursor: pointer;"
+              ><i class="fa-solid fa-paperclip"></i
+            ></label>
+            <input
+              type="file"
+              class="form-control attach-file d-none"
+              id="attach-file"
+              name="attach-file"
+              required
+            />
+          </div>
           <button class="sendButton btn btn-primary">Send</button>
         </div>
       </div>
     </div>
 
     <script>
-      const username = "<%= user.username %>";
+      const usernameLogged = "<%= user.username %>";
     </script>
 
     <script src="/socket.io/socket.io.js"></script>

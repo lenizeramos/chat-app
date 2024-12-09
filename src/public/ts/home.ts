@@ -1,7 +1,7 @@
 /// <reference types="jquery" />
 
 declare const io: any;
-declare const username: string;
+declare const usernameLogged: string;
 
 interface User {
     id: number;
@@ -103,7 +103,7 @@ $(() => {
         }
     });
 
-    const socket = io({ query: { username } });
+    const socket = io({ query: { username: usernameLogged } });
     let currentRoom: string | null = null;
     const $messageInput: JQuery<HTMLInputElement> = $(".messageInput");
     const $sendButton: JQuery = $(".sendButton");
