@@ -7,3 +7,18 @@
     background-color: $primary-color;
   }
 }
+
+.messages {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.message-logged-user {
+  background-color: rgba(211, 211, 211, 0.555);
+}
+
+.message-other-user {
+  background-color: rgba(135, 207, 235, 0.295);
+}
+

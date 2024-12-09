@@ -37,7 +37,7 @@ export const initSocket = (server: HttpServer) => {
         await createMessage(message, room, user.id);
       }
 
-      io.to(room).emit("message", { id: username, message });
+      io.to(room).emit("message", { username, message });
     });
 
     socket.on("disconnect", () => {

@@ -24,7 +24,7 @@ $(function () {
             .html("Please enter an username!");
         } */
     });
-    var socket = io({ query: { username: username } });
+    var socket = io({ query: { username: usernameLogged } });
     var currentRoom = null;
     var $messageInput = $(".messageInput");
     var $sendButton = $(".sendButton");
@@ -63,13 +63,33 @@ $(function () {
     socket.on("previousMessages", function (messages) {
         messages.forEach(function (_a) {
             var username = _a.username, content = _a.content;
-            var $messageElement = $("<div>").text("".concat(username, ": ").concat(content));
+            var $messageElement;
+            if (usernameLogged === username) {
+                $messageElement = $("<div>")
+                    .addClass("messages p-2 mb-2 message-logged-user rounded border")
+                    .text("".concat(username, ": ").concat(content));
+            }
+            else {
+                $messageElement = $("<div>")
+                    .addClass("messages p-2 mb-2 message-other-user rounded border")
+                    .text("".concat(username, ": ").concat(content));
+            }
             $messagesDiv.append($messageElement);
         });
     });
     socket.on("message", function (_a) {
-        var id = _a.id, message = _a.message;
-        var $messageElement = $("<div>").text("".concat(id, ": ").concat(message));
+        var username = _a.username, message = _a.message;
+        var $messageElement;
+        if (usernameLogged === username) {
+            $messageElement = $("<div>")
+                .addClass("messages p-2 mb-2 message-logged-user rounded border")
+                .text("".concat(username, ": ").concat(message));
+        }
+        else {
+            $messageElement = $("<div>")
+                .addClass("messages p-2 mb-2 message-other-user rounded border")
+                .text("".concat(username, ": ").concat(message));
+        }
         $messagesDiv.append($messageElement);
     });
 });

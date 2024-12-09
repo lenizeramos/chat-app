@@ -1,5 +1,5 @@
 declare const io: any;
-declare const username: string;
+declare const usernameLogged: string;
 
 $(() => {
   const postData = (url: string, method: string, data?: any) => {
@@ -28,7 +28,7 @@ $(() => {
     } */
   });
 
-  const socket = io({ query: { username } });
+  const socket = io({ query: { username: usernameLogged } });
 
   let currentRoom: string | null = null;
 
@@ -75,14 +75,36 @@ $(() => {
     "previousMessages",
     (messages: { username: string; content: string }[]) => {
       messages.forEach(({ username, content }) => {
-        const $messageElement = $("<div>").text(`${username}: ${content}`);
+        let $messageElement;
+        if (usernameLogged === username) {
+          $messageElement = $("<div>")
+            .addClass("messages p-2 mb-2 message-logged-user rounded border")
+            .text(`${username}: ${content}`);
+        } else {
+          $messageElement = $("<div>")
+            .addClass("messages p-2 mb-2 message-other-user rounded border")
+            .text(`${username}: ${content}`);
+        }
+
         $messagesDiv.append($messageElement);
       });
     }
   );
 
-  socket.on("message", ({ id, message }: { id: string; message: string }) => {
-    const $messageElement = $("<div>").text(`${id}: ${message}`);
-    $messagesDiv.append($messageElement);
-  });
+  socket.on(
+    "message",
+    ({ username, message }: { username: string; message: string }) => {
+      let $messageElement;
+      if (usernameLogged === username) {
+        $messageElement = $("<div>")
+          .addClass("messages p-2 mb-2 message-logged-user rounded border")
+          .text(`${username}: ${message}`);
+      } else {
+        $messageElement = $("<div>")
+          .addClass("messages p-2 mb-2 message-other-user rounded border")
+          .text(`${username}: ${message}`);
+      }
+      $messagesDiv.append($messageElement);
+    }
+  );
 });
