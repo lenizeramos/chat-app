@@ -70,12 +70,44 @@ $(() => {
       $messageInput.val("");
     }
   });
+  $(".attach-file").on("change", async (e) => {
+    const fileInput = e.target as HTMLInputElement;
+    const file = fileInput?.files?.[0];
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("attach-file", file);
+
+      try {
+        const response = await fetch("/chat/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          const { fileUrl } = await response.json();
+
+          console.log(fileUrl, "FRONTEND fileURL");
+          console.log(currentRoom, "FRONTEND currentRoom");
+
+          socket.emit("message", {
+            room: currentRoom,
+            message: "",
+            fileUrl,
+          });
+        }
+      } catch (error) {
+        console.error("File upload failed:", error);
+      }
+    }
+  });
 
   socket.on(
     "previousMessages",
-    (messages: { username: string; content: string }[]) => {
-      messages.forEach(({ username, content }) => {
-        let $messageElement;
+    (messages: { username: string; content: string; imageUrl: string }[]) => {
+      messages.forEach(({ username, content, imageUrl }) => {
+        displayMessage(username, content, imageUrl);
+        /* let $messageElement;
         if (usernameLogged === username) {
           $messageElement = $("<div>")
             .addClass("messages p-2 mb-2 message-logged-user rounded border")
@@ -86,15 +118,24 @@ $(() => {
             .text(`${username}: ${content}`);
         }
 
-        $messagesDiv.append($messageElement);
+        $messagesDiv.append($messageElement); */
       });
     }
   );
 
   socket.on(
     "message",
-    ({ username, message }: { username: string; message: string }) => {
-      let $messageElement;
+    ({
+      username,
+      message,
+      fileUrl,
+    }: {
+      username: string;
+      message: string;
+      fileUrl: string;
+    }) => {
+      displayMessage(username, message, fileUrl);
+      /* let $messageElement;
       if (usernameLogged === username) {
         $messageElement = $("<div>")
           .addClass("messages p-2 mb-2 message-logged-user rounded border")
@@ -104,7 +145,47 @@ $(() => {
           .addClass("messages p-2 mb-2 message-other-user rounded border")
           .text(`${username}: ${message}`);
       }
-      $messagesDiv.append($messageElement);
+      $messagesDiv.append($messageElement); */
     }
   );
+  const displayMessage = (
+    username: string,
+    message: string,
+    fileUrl?: string
+  ) => {
+    let $messageElement;
+
+    if (usernameLogged === username) {
+      $messageElement = $("<div>")
+        .addClass("messages p-2 mb-2 message-logged-user rounded border")
+        .text(`${username}: ${message || ""}`);
+    } else {
+      $messageElement = $("<div>")
+        .addClass("messages p-2 mb-2 message-other-user rounded border")
+        .text(`${username}: ${message || ""}`);
+    }
+
+    if (fileUrl) {
+      const isImage = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(fileUrl);
+
+      if (isImage) {
+        const $fileElement = $("<img>")
+          .attr("src", fileUrl)
+          .attr("alt", "Image sent")
+          .addClass("img-thumbnail mt-2");
+        $messageElement.append($fileElement);
+      } else {
+        const $fileLink = $("<a>")
+          .attr("href", fileUrl)
+          .attr("target", "_blank")
+          .text("Click here to download the file")
+          .addClass("file-link d-block mt-2 text-primary");
+        $messageElement.append($fileLink);
+      }
+    }
+
+    $messagesDiv.append($messageElement);
+
+    //$messagesDiv.scrollTop($messagesDiv[0].scrollHeight);
+  };
 });

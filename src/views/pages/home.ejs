@@ -64,18 +64,23 @@
             class="messageInput form-control me-2"
             placeholder="Type a message..."
           ></textarea>
-          <div class="m-3">
-            <label for="attach-file" class="paperclip"
-              ><i class="fa-solid fa-paperclip"></i
-            ></label>
-            <input
-              type="file"
-              class="form-control attach-file d-none"
-              id="attach-file"
-              name="attach-file"
-              required
-            />
-          </div>
+          <form
+            action=""
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <div class="m-3">
+              <label for="attach-file" class="paperclip"
+                ><i class="fa-solid fa-paperclip"></i
+              ></label>
+              <input
+                type="file"
+                class="form-control attach-file d-none"
+                id="attach-file"
+                name="attach-file"
+              />
+            </div>
+          </form>
           <button class="sendButton btn btn-primary">Send</button>
         </div>
       </div>
