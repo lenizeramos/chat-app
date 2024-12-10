@@ -31,9 +31,13 @@ export const registerUser: RequestHandler = async (
       return res.status(400).json({ error: "All fields are required." });
     }
 
-   const user = await createUser(userBody);
+    const user = await createUser(userBody);
 
-    req.session.user = { username: user.username, email: user.email, id: user.id };
+    req.session.user = {
+      username: user.username,
+      email: user.email,
+      id: user.id,
+    };
     res.redirect("/");
   } catch (error) {
     res.json({ error: "User already exists!" });
@@ -59,7 +63,11 @@ export const loginUser: RequestHandler = async (
     const user = await getAuthUserByEmail(email);
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      req.session.user = { username: user.username, email: user.email, id: user.id };
+      req.session.user = {
+        username: user.username,
+        email: user.email,
+        id: user.id,
+      };
 
       res.redirect("/");
     } else {

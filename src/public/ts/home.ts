@@ -43,7 +43,6 @@ $(() => {
     const target = $(e.currentTarget);
     const room = target.data("chat-id");
     const chatName = target.data("chat-name");
-    console.log(room);
 
     if (currentRoom) {
       socket.emit("leaveRoom", currentRoom);
@@ -87,9 +86,6 @@ $(() => {
         if (response.ok) {
           const { fileUrl } = await response.json();
 
-          console.log(fileUrl, "FRONTEND fileURL");
-          console.log(currentRoom, "FRONTEND currentRoom");
-
           socket.emit("message", {
             room: currentRoom,
             message: "",
@@ -107,18 +103,6 @@ $(() => {
     (messages: { username: string; content: string; imageUrl: string }[]) => {
       messages.forEach(({ username, content, imageUrl }) => {
         displayMessage(username, content, imageUrl);
-        /* let $messageElement;
-        if (usernameLogged === username) {
-          $messageElement = $("<div>")
-            .addClass("messages p-2 mb-2 message-logged-user rounded border")
-            .text(`${username}: ${content}`);
-        } else {
-          $messageElement = $("<div>")
-            .addClass("messages p-2 mb-2 message-other-user rounded border")
-            .text(`${username}: ${content}`);
-        }
-
-        $messagesDiv.append($messageElement); */
       });
     }
   );
@@ -135,17 +119,6 @@ $(() => {
       fileUrl: string;
     }) => {
       displayMessage(username, message, fileUrl);
-      /* let $messageElement;
-      if (usernameLogged === username) {
-        $messageElement = $("<div>")
-          .addClass("messages p-2 mb-2 message-logged-user rounded border")
-          .text(`${username}: ${message}`);
-      } else {
-        $messageElement = $("<div>")
-          .addClass("messages p-2 mb-2 message-other-user rounded border")
-          .text(`${username}: ${message}`);
-      }
-      $messagesDiv.append($messageElement); */
     }
   );
   const displayMessage = (

@@ -9,7 +9,6 @@ export const getUserById = async (id: number) => {
 };
 
 export const addChatParticipant = async (chatId: number, userId: number) => {
-  // console.log(userId, "UserIdModel");
 
   return await prisma.chatParticipant.create({ data: { chatId, userId } });
 };
@@ -25,7 +24,6 @@ export const doesDirectExist = async (user1Id: number, user2Id: number) => {
       },
     },
   });
-  //console.log(existingChat);
 
   if (existingChat) {
     return true;

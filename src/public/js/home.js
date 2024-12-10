@@ -73,7 +73,6 @@ $(function () {
         var target = $(e.currentTarget);
         var room = target.data("chat-id");
         var chatName = target.data("chat-name");
-        console.log(room);
         if (currentRoom) {
             socket.emit("leaveRoom", currentRoom);
         }
@@ -121,8 +120,6 @@ $(function () {
                     return [4 /*yield*/, response.json()];
                 case 3:
                     fileUrl = (_b.sent()).fileUrl;
-                    console.log(fileUrl, "FRONTEND fileURL");
-                    console.log(currentRoom, "FRONTEND currentRoom");
                     socket.emit("message", {
                         room: currentRoom,
                         message: "",
@@ -142,34 +139,11 @@ $(function () {
         messages.forEach(function (_a) {
             var username = _a.username, content = _a.content, imageUrl = _a.imageUrl;
             displayMessage(username, content, imageUrl);
-            /* let $messageElement;
-            if (usernameLogged === username) {
-              $messageElement = $("<div>")
-                .addClass("messages p-2 mb-2 message-logged-user rounded border")
-                .text(`${username}: ${content}`);
-            } else {
-              $messageElement = $("<div>")
-                .addClass("messages p-2 mb-2 message-other-user rounded border")
-                .text(`${username}: ${content}`);
-            }
-    
-            $messagesDiv.append($messageElement); */
         });
     });
     socket.on("message", function (_a) {
         var username = _a.username, message = _a.message, fileUrl = _a.fileUrl;
         displayMessage(username, message, fileUrl);
-        /* let $messageElement;
-        if (usernameLogged === username) {
-          $messageElement = $("<div>")
-            .addClass("messages p-2 mb-2 message-logged-user rounded border")
-            .text(`${username}: ${message}`);
-        } else {
-          $messageElement = $("<div>")
-            .addClass("messages p-2 mb-2 message-other-user rounded border")
-            .text(`${username}: ${message}`);
-        }
-        $messagesDiv.append($messageElement); */
     });
     var displayMessage = function (username, message, fileUrl) {
         var $messageElement;

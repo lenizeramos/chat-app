@@ -52,13 +52,11 @@ export const uploadFile: RequestHandler = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.file, "CHAT CONTROLLER");
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
     const fileUrl = `/uploads/${req.file.filename}`;
-    console.log("File path:", fileUrl);
 
     res.status(200).json({ message: "File uploaded successfully", fileUrl });
   } catch (error) {
