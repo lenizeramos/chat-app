@@ -21,7 +21,6 @@ nav .logo {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-<<<<<<< Upstream, based on origin/julio
 }
 
 body, input {
@@ -34,11 +33,8 @@ body, input {
 }
 .search-result:hover {
   background-color: #f8f9fa;
-=======
->>>>>>> 5af9b7f add prisma to homeController and removed chat from home.ejs
 }
 
-<<<<<<< Upstream, based on origin/julio
 #searchResults {
   max-height: 200px;
   overflow-y: auto;
@@ -46,25 +42,12 @@ body, input {
   border: 1px solid #dee2e6;
   border-top: none;
   border-radius: 0 0 0.25rem 0.25rem;
-=======
-body, input {
-  font-family: "Poppins", sans-serif;
->>>>>>> 5af9b7f add prisma to homeController and removed chat from home.ejs
 }
 
-<<<<<<< Upstream, based on origin/julio
 .search-container {
   position: relative;
-=======
-.btn {
-  background-color: #9A11BF;
-}
-.btn:hover {
-  background-color: #087F8C;
->>>>>>> 5af9b7f add prisma to homeController and removed chat from home.ejs
 }
 
-<<<<<<< Upstream, based on origin/julio
 #searchUserInput:focus + #searchResults:not(.d-none) {
   display: block;
 }
@@ -160,8 +143,6 @@ body, input {
   background-color: #087F8C;
 }
 
-=======
->>>>>>> 5af9b7f add prisma to homeController and removed chat from home.ejs
 .messages {
   max-width: 100%;
   word-wrap: break-word;
