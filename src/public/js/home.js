@@ -18,9 +18,11 @@ $(function () {
     var $searchInput = $("#searchUserInput");
     var $searchResults = $("#searchResults");
     var searchTimeout;
+    var selectedUserId = null;
 
     $searchInput.on("input", function() {
         clearTimeout(searchTimeout);
+        selectedUserId = null; // Clear selected user when input changes
         var searchTerm = $(this).val().trim();
 
         if (searchTerm === "") {
@@ -37,9 +39,18 @@ $(function () {
                     }
 
                     var resultsHtml = users.map(function(user) {
-                        return `<div class="search-result p-2 hover-bg-light cursor-pointer" data-user-id="${user.id}">
-                            ${user.username}
-                        </div>`;
+                        var initials = user.username.substring(0, 2).toUpperCase();
+                        var avatarHtml = user.avatar 
+                            ? `<img src="${user.avatar}" class="avatar-img" alt="${user.username}'s avatar">` 
+                            : `<div class="avatar-initials">${initials}</div>`;
+
+                        return `
+                            <div class="search-result p-2 hover-bg-light cursor-pointer d-flex align-items-center" data-user-id="${user.id}" data-username="${user.username}">
+                                <div class="avatar rounded-circle text-white text-center me-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: #007bff;">
+                                    ${avatarHtml}
+                                </div>
+                                <span>${user.username}</span>
+                            </div>`;
                     }).join("");
 
                     $searchResults.html(resultsHtml).removeClass("d-none");
@@ -50,10 +61,23 @@ $(function () {
         }, 300);
     });
 
-    // Handle search result click
+    // Handle search result selection
     $(document).on("click", ".search-result", function() {
         var userId = $(this).data("user-id");
+        var username = $(this).data("username");
+        selectedUserId = userId;
+        $searchInput.val(username);
+        $searchResults.addClass("d-none");
         postData("/chat/direct", "POST", { id: userId });
+    });
+
+    // Handle search form submission
+    $("#searchForm").on("submit", function(e) {
+        e.preventDefault();
+        if (selectedUserId) {
+            postData("/chat/direct", "POST", { id: selectedUserId });
+        }
+        // If no user is selected, do nothing
     });
 
     // Hide search results when clicking outside
@@ -106,14 +130,56 @@ $(function () {
     socket.on("previousMessages", function (messages) {
         messages.forEach(function (_a) {
             var username = _a.username, content = _a.content;
-            var $messageElement = $("<div>").text("".concat(username, ": ").concat(content));
+            var initials = username.substring(0, 2).toUpperCase();
+            var $messageElement = $("<div>").addClass("message-item d-flex align-items-start mb-2");
+            
+            var $avatar = $("<div>")
+                .addClass("avatar rounded-circle text-white text-center me-2 d-flex align-items-center justify-content-center")
+                .css({
+                    width: "32px",
+                    height: "32px",
+                    backgroundColor: "#007bff",
+                    fontSize: "12px"
+                })
+                .text(initials);
+
+            var $messageContent = $("<div>")
+                .addClass("message-content")
+                .append($("<strong>").text(username + ": "))
+                .append($("<span>").text(content));
+
+            $messageElement.append($avatar).append($messageContent);
             $messagesDiv.append($messageElement);
         });
+        
+        // Scroll to bottom after adding messages
+        $messagesDiv.scrollTop($messagesDiv[0].scrollHeight);
     });
 
     socket.on("message", function (_a) {
         var id = _a.id, message = _a.message;
-        var $messageElement = $("<div>").text("".concat(id, ": ").concat(message));
+        var initials = id.substring(0, 2).toUpperCase();
+        var $messageElement = $("<div>").addClass("message-item d-flex align-items-start mb-2");
+        
+        var $avatar = $("<div>")
+            .addClass("avatar rounded-circle text-white text-center me-2 d-flex align-items-center justify-content-center")
+            .css({
+                width: "32px",
+                height: "32px",
+                backgroundColor: "#007bff",
+                fontSize: "12px"
+            })
+            .text(initials);
+
+        var $messageContent = $("<div>")
+            .addClass("message-content")
+            .append($("<strong>").text(id + ": "))
+            .append($("<span>").text(message));
+
+        $messageElement.append($avatar).append($messageContent);
         $messagesDiv.append($messageElement);
+        
+        // Scroll to bottom after adding new message
+        $messagesDiv.scrollTop($messagesDiv[0].scrollHeight);
     });
 });

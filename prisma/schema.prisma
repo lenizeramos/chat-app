@@ -12,6 +12,7 @@ model User {
   username  String            @unique
   email     String            @unique
   password  String
+  avatar    String?          // Optional avatar image URL
   createdAt DateTime          @default(now())
   chats     ChatParticipant[]
   messages  Message[]

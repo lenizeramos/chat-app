@@ -14,35 +14,39 @@
       <div class="forms-container">
         <div class="signin-signup">
        
-          <form action="/auth/login" class="sign-in-form" method="post">
+          <form class="sign-in-form">
             <h2 class="title">Login</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="email" name="email" placeholder="Email" id="email" required value="admin@admin.com"/>
+              <input type="email" name="email" id="login-email" placeholder="Email" required autocomplete="email" value="admin@admin.com"/>
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" name="password" placeholder="Password" required value="admiN*&" />
+              <input type="password" name="password" id="login-password" placeholder="Password" required autocomplete="current-password" value="admiN*&" />
             </div>
             <input type="submit" value="Login" class="btn solid btn-login" />
           </form>
   
           
-          <form action="/auth/register" class="sign-up-form" method="post">
+          <form class="sign-up-form">
             <h2 class="title">Register</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" name="username"
-              id="username" placeholder="Username" required />
+              <input type="text" name="username" id="register-username" placeholder="Username" required autocomplete="username" />
             </div>
             <div class="input-field">
               <i class="fas fa-envelope"></i>
-              <input type="email" name="email" id="email" placeholder="Email" required />
+              <input type="email" name="email" id="register-email" placeholder="Email" required autocomplete="email" />
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" name="password" id="password" placeholder="Password" required />
+              <input type="password" name="password" id="register-password" placeholder="Password" required autocomplete="new-password" />
             </div>
+            <div class="input-field">
+              <i class="fas fa-image"></i>
+              <input type="file" name="avatar" id="avatar" accept="image/*" class="file-input" />
+            </div>
+            <div id="avatar-preview" class="avatar-preview"></div>
             <input type="submit" class="btn btn-register" value="Register" />
           </form>
         </div>

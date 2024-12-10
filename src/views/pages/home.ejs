@@ -33,9 +33,13 @@
               data-chat-id="<%= chat.chat.id %>" data-chat-name="<%= chat.chat.name %>"
             >
               <div
-                class="avatar rounded-circle bg-primary text-white text-center me-3"
-                style="width: 40px; height: 40px"
-              ></div>
+                class="avatar rounded-circle text-white text-center me-3 d-flex align-items-center justify-content-center"
+                style="width: 40px; height: 40px; background-color: #007bff;"
+              >
+                <% if (chat.chat.name) { %>
+                  <%= chat.chat.name.substring(0, 2).toUpperCase() %>
+                <% } %>
+              </div>
               <div>
                 <strong><%= chat.chat.name %></strong>
                 <p class="text-muted small m-0"></p>
