@@ -7,30 +7,32 @@ import { getAuthUserByEmail, createUser } from "../models/userModel";
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../public/uploads/avatars'));
+    cb(null, path.join(__dirname, "../public/uploads/avatars"));
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'avatar-' + uniqueSuffix + path.extname(file.originalname));
-  }
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, "avatar-" + uniqueSuffix + path.extname(file.originalname));
+  },
 });
 
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 5 * 1024 * 1024, // 5MB limit
   },
   fileFilter: function (req, file, cb) {
     const filetypes = /jpeg|jpg|png/;
     const mimetype = filetypes.test(file.mimetype);
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
 
     if (mimetype && extname) {
       return cb(null, true);
     }
-    cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-  }
-}).single('avatar');
+    cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
+  },
+}).single("avatar");
 
 export const getAuth: RequestHandler = async (req: Request, res: Response) => {
   try {
@@ -38,7 +40,8 @@ export const getAuth: RequestHandler = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       status: "error",
-      message: error instanceof Error ? error.message : "An unknown error occurred",
+      message:
+        error instanceof Error ? error.message : "An unknown error occurred",
     });
   }
 };
@@ -54,9 +57,11 @@ export const registerUser: RequestHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  upload(req, res, async function(err) {
+  upload(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
-      return res.status(400).json({ error: "File upload error: " + err.message });
+      return res
+        .status(400)
+        .json({ error: "File upload error: " + err.message });
     } else if (err) {
       return res.status(400).json({ error: err.message });
     }
@@ -77,38 +82,45 @@ export const registerUser: RequestHandler = async (
 
       // Validate password strength
       if (password.length < 6) {
-        return res.status(400).json({ error: "Password must be at least 6 characters long." });
+        return res
+          .status(400)
+          .json({ error: "Password must be at least 6 characters long." });
       }
 
       // Add avatar path if file was uploaded
-      const avatarPath = req.file ? `/uploads/avatars/${req.file.filename}` : null;
-      
+      const avatarPath = req.file
+        ? `/uploads/avatars/${req.file.filename}`
+        : null;
+
       const user = await createUser({
         username,
         email,
         password,
-        avatar: avatarPath
+        avatar: avatarPath,
       });
 
       // Set session
-      req.session.user = { 
-        username: user.username, 
-        email: user.email, 
-        id: user.id 
+      req.session.user = {
+        username: user.username,
+        email: user.email,
+        id: user.id,
       };
 
       // Return success response
-      return res.status(200).json({ 
+      return res.status(200).json({
         success: true,
         message: "Registration successful",
-        redirect: "/"
+        redirect: "/",
       });
-
     } catch (error) {
       if (error instanceof Error && error.message === "User already exists") {
-        return res.status(400).json({ error: "User with this email already exists." });
+        return res
+          .status(400)
+          .json({ error: "User with this email already exists." });
       }
-      return res.status(500).json({ error: "An error occurred during registration." });
+      return res
+        .status(500)
+        .json({ error: "An error occurred during registration." });
     }
   });
 };
@@ -127,7 +139,9 @@ export const loginUser: RequestHandler = async (
   try {
     // Validate required fields
     if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required." });
+      return res
+        .status(400)
+        .json({ error: "Email and password are required." });
     }
 
     const user = await getAuthUserByEmail(email);
@@ -143,19 +157,18 @@ export const loginUser: RequestHandler = async (
     }
 
     // Set session
-    req.session.user = { 
-      username: user.username, 
-      email: user.email, 
-      id: user.id 
+    req.session.user = {
+      username: user.username,
+      email: user.email,
+      id: user.id,
     };
 
     // Return success response
-    return res.status(200).json({ 
+    return res.status(200).json({
       success: true,
       message: "Login successful",
-      redirect: "/"
+      redirect: "/",
     });
-
   } catch (error) {
     return res.status(500).json({ error: "An error occurred during login." });
   }
