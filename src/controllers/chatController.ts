@@ -45,3 +45,21 @@ export const createDirect: RequestHandler = async (
     res.status(400).json({ error: error });
   }
 };
+
+export const uploadFile: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const fileUrl = `/uploads/${req.file.filename}`;
+
+    res.status(200).json({ message: "File uploaded successfully", fileUrl });
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+};

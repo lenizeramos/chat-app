@@ -4,6 +4,7 @@ import homeRoutes from "./homeRoutes";
 import errorRoutes from "./errorRoutes";
 import chatRoutes from "./chatRoutes";
 
+
 export const apiRouter = Router();
 
 const ROUTER = [

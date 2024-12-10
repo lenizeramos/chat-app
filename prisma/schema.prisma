@@ -12,6 +12,7 @@ model User {
   username  String            @unique
   email     String            @unique
   password  String
+  avatar    String?          // Optional avatar image URL
   createdAt DateTime          @default(now())
   chats     ChatParticipant[]
   messages  Message[]
@@ -32,7 +33,7 @@ model Chat {
 
 model Message {
   id        Int      @id @default(autoincrement())
-  content   String
+  content   String?
   imageUrl  String?
   createdAt DateTime @default(now())
   userId    Int
@@ -47,6 +48,7 @@ model ChatParticipant {
   id       Int      @id @default(autoincrement())
   userId   Int
   chatId   Int
+  isAdm    String?
   joinedAt DateTime @default(now())
   user     User     @relation(fields: [userId], references: [id])
   chat     Chat     @relation(fields: [chatId], references: [id])
