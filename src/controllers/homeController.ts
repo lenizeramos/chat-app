@@ -1,5 +1,6 @@
 import { Response, Request } from "express";
 import { getChatByUserId } from "../models/chatModel";
+import { prisma } from "../prisma";
 
 export const getIndex = async (req: Request, res: Response) => {
   try {
