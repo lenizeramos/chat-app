@@ -9,7 +9,7 @@
     <header><%- include("../partials/header.ejs", {page: "home"}) %></header>
 
     <div class="container-fluid vh-90 d-flex">
-      <div class="col-4 border-end p-3">
+      <div id="contact" class=" col-4 border-end p-3">
         <div class="search-container position-relative mb-3">
           <form action="/chat/direct" method="post" id="searchForm">
             <input
@@ -59,7 +59,7 @@
         </div>
       </div>
 
-      <div
+      <div id="chatRoom"
         class="col-8 d-flex flex-column align-items-center justify-content-center"
       >
         <div class="chat-placeholder w-100">

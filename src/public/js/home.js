@@ -123,13 +123,28 @@ $(function () {
     var $chatPlaceholder = $(".chat-placeholder");
     var $createGroupButton = $("#createGroupButton");
     var $createGroupForm = $("#createGroupForm");
+    var $contact = $("#contact");
+    var $chatRoom = $("#chatRoom");
+    var windowWidth = $(window).width() || 0;
+    if (windowWidth <= 768) {
+        $chatRoom.addClass("d-none");
+        $contact.removeClass("d-none");
+    }
     $createGroupButton.on("click", function () {
+        if (windowWidth <= 768) {
+            $chatRoom.removeClass("d-none");
+            $contact.addClass("d-none");
+        }
         $createGroupForm.removeClass("d-none");
         $chatPlaceholder.addClass("d-none");
         $chatArea.addClass("d-none");
     });
     $createGroupForm.on("submit", function (e) {
         e.preventDefault();
+        if (windowWidth <= 768) {
+            $chatRoom.addClass("d-none");
+            $contact.removeClass("d-none");
+        }
         $createGroupForm.addClass("d-none");
         $chatPlaceholder.removeClass("d-none");
     });
@@ -137,6 +152,10 @@ $(function () {
         var target = $(e.currentTarget);
         var room = target.data("chat-id");
         var chatName = target.data("chat-name");
+        if (windowWidth <= 768) {
+            $chatRoom.removeClass("d-none");
+            $contact.addClass("d-none");
+        }
         $chatArea.removeClass("d-none");
         $chatPlaceholder.addClass("d-none");
         console.log(room);
@@ -157,6 +176,10 @@ $(function () {
             currentRoom = null;
             $currentRoomDisplay.text("NO ROOMS");
             $messagesDiv.empty();
+        }
+        if (windowWidth <= 768) {
+            $chatRoom.addClass("d-none");
+            $contact.removeClass("d-none");
         }
         $chatArea.addClass("d-none");
         $chatPlaceholder.removeClass("d-none");

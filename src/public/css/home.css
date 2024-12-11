@@ -174,4 +174,13 @@ body, input {
   color: black;
 }
 
+@media (max-width: 768px) {
+  #contact {
+    width: 100%;
+  }
+  #chatRoom {
+    width: 100%;
+  }
+}
+
 /*# sourceMappingURL=home.css.map */
