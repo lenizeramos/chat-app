@@ -7,7 +7,7 @@ import {
   removeGroupParticipant,
   addMessageToGroup,
   getGroupParticipants
-} from "../models/chatroomModel";
+} from "../models/groupChatModel";
 
 export const createNewGroup = async (req: Request, res: Response, next: NextFunction) => {
   try {

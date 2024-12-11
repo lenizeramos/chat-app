@@ -7,7 +7,7 @@ import {
   leaveGroup,
   sendMessage,
   getParticipants
-} from "../controllers/chatroomController";
+} from "../controllers/groupChatController";
 
 const router = Router();
 
