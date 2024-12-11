@@ -113,11 +113,68 @@ $(() => {
   const $joinRoomButton: JQuery = $(".joinRoomButton");
   const $leaveRoomButton: JQuery = $(".leaveRoomButton");
   const $currentRoomDisplay: JQuery = $(".currentRoom");
+  const $chatArea: JQuery = $(".chat-area");
+  const $chatPlaceholder: JQuery = $(".chat-placeholder");
+  const $createGroupButton: JQuery = $("#createGroupButton");
+  const $createGroupForm: JQuery = $("#createGroupForm");
+  const $contact: JQuery = $("#contact");
+  const $chatRoom: JQuery = $("#chatRoom");
+
+  const isMobileView = () => ($(window).width() || 0) <= 768;
+  const showOnlyContact = () => {
+    $chatRoom.addClass("d-none");
+    $contact.removeClass("d-none");
+  };
+  const showOnlyChatRoom = () => {
+    $chatRoom.removeClass("d-none");
+    $contact.addClass("d-none");
+  };
+  const showContactAndChatRoom = () => {
+    $chatRoom.removeClass("d-none");
+    $contact.removeClass("d-none");
+  };
+
+  if (isMobileView()) {
+    showOnlyContact();
+  }
+
+  $(window).on("resize", () => {
+    if (isMobileView()) {
+      showOnlyContact();
+    } else {
+      showContactAndChatRoom();
+    }
+  });
+
+  $createGroupButton.on("click", () => {
+    if (isMobileView()) {
+      showOnlyChatRoom();
+    }
+
+    $createGroupForm.removeClass("d-none");
+    $chatPlaceholder.addClass("d-none");
+    $chatArea.addClass("d-none");
+  });
+  $createGroupForm.on("submit", (e: JQuery.TriggeredEvent) => {
+    e.preventDefault();
+    if (isMobileView()) {
+      showOnlyContact();
+    }
+    $createGroupForm.addClass("d-none");
+    $chatPlaceholder.removeClass("d-none");
+  });
 
   $joinRoomButton.on("click", (e: JQuery.TriggeredEvent) => {
     const target = $(e.currentTarget);
     const room = target.data("chat-id");
     const chatName = target.data("chat-name");
+
+    if (isMobileView()) {
+      showOnlyChatRoom();
+    }
+
+    $chatArea.removeClass("d-none");
+    $chatPlaceholder.addClass("d-none");
     console.log(room);
     if (currentRoom) {
       socket.emit("leaveRoom", currentRoom);
@@ -125,6 +182,9 @@ $(() => {
     socket.emit("joinRoom", room);
     currentRoom = room;
     $currentRoomDisplay.text(chatName);
+    $chatArea.removeClass("d-none");
+    $chatPlaceholder.addClass("d-none");
+    $createGroupForm.addClass("d-none");
     $messagesDiv.empty();
   });
 
@@ -135,6 +195,11 @@ $(() => {
       $currentRoomDisplay.text("NO ROOMS");
       $messagesDiv.empty();
     }
+    if (isMobileView()) {
+      showOnlyContact();
+    }
+    $chatArea.addClass("d-none");
+    $chatPlaceholder.removeClass("d-none");
   });
 
   $sendButton.on("click", () => {
