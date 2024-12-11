@@ -10,15 +10,19 @@
 
     <div class="container-fluid vh-90 d-flex">
       <div class="chat-list col-4 border-end p-3">
-        <form action="/chat/direct" method="post" id="searchForm">
-          <input
-            type="text"
-            name="searchUserInput"
-            id="searchUserInput"
-            required
-          />
-          <button type="submit">Search User</button>
-        </form>
+        <div class="search-container position-relative mb-3">
+          <form action="/chat/direct" method="post" id="searchForm">
+            <input
+              type="text"
+              name="searchUserInput"
+              id="searchUserInput"
+              class="form-control"
+              placeholder="Search users..."
+              autocomplete="off"
+            />
+            <div id="searchResults" class="position-absolute w-100 bg-white border rounded shadow-sm d-none" style="z-index: 1000;"></div>
+          </form>
+        </div>
         <h5 class="mb-3">Chats</h5>
 
         <div>
@@ -26,14 +30,19 @@
             <% chats.forEach(chat => { %>
             <li
               class="list-group-item d-flex align-items-center chat-item joinRoomButton"
-              data-chat-id="<%= chat.chat.id %>" data-chat-name="<%= chat.chat.name %>"
+              data-chat-id="<%= chat.id %>"
+              data-chat-name="<%= chat.name %>"
             >
               <div
-                class="avatar rounded-circle bg-primary text-white text-center me-3"
-                style="width: 40px; height: 40px"
-              ></div>
+                class="avatar rounded-circle text-white text-center me-3 d-flex align-items-center justify-content-center"
+                style="width: 40px; height: 40px; background-color: #007bff;"
+              >
+                <% if (chat.name) { %>
+                  <%= chat.name.substring(0, 2).toUpperCase() %>
+                <% } %>
+              </div>
               <div>
-                <strong><%= chat.chat.name %></strong>
+                <strong><%= chat.name %></strong>
                 <p class="text-muted small m-0"></p>
               </div>
             </li>
@@ -58,18 +67,35 @@
         </div>
 
         <div class="messageForm p-3 border-top d-flex align-items-center">
-          <input
+          <textarea
             type="text"
             class="messageInput form-control me-2"
             placeholder="Type a message..."
-          />
+          ></textarea>
+          <form
+            action=""
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <div class="m-3">
+              <label for="attach-file" class="paperclip"
+                ><i class="fa-solid fa-paperclip"></i
+              ></label>
+              <input
+                type="file"
+                class="form-control attach-file d-none"
+                id="attach-file"
+                name="attach-file"
+              />
+            </div>
+          </form>
           <button class="sendButton btn btn-primary">Send</button>
         </div>
       </div>
     </div>
 
     <script>
-      const username = "<%= user.username %>";
+      const usernameLogged = "<%= user.username %>";
     </script>
 
     <script src="/socket.io/socket.io.js"></script>
