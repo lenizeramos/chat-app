@@ -162,16 +162,29 @@ body, input {
 }
 
 .chat-placeholder {
-  background-image: url("");
+  position: relative;
   background-color: #cccccc;
+}
+
+.chat-placeholder::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url("../media/img/chat_placeholder.jpg");
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  opacity: 0.3;
+  z-index: 1;
 }
-.chat-placeholder .chat-placeholder-text {
+
+.chat-placeholder-text {
+  max-height: 100%;
   background-color: white;
   text-align: center;
   color: black;
+  z-index: 2;
 }
 
 @media (max-width: 768px) {
