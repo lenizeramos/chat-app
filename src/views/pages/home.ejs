@@ -71,14 +71,32 @@
         id="createGroupForm"
         class="col-8 d-flex flex-column align-items-center justify-content-start mt-3 d-none"
       >
-      <div class="mb-3"><label for="groupName" class="form-label">Group name:</label>
-        <input type="text" name="groupName" id="groupName" class="form-control" required></div>
-        
-        <button type="submit"
-          class="bg-red-500 text-black p-2 ml-2 rounded"
-        >
-          Submit
-        </button>
+        <div class="mb-3">
+          <label for="groupName" class="form-label">Group name:</label>
+          <input
+            type="text"
+            name="groupName"
+            id="groupName"
+            class="form-control"
+            required
+          />
+          <div class="d-flex justify-content-center">
+            <button
+              type="submit"
+              class="bg-red-500 text-black p-2 ml-2 rounded"
+            >
+              Submit
+            </button>
+            <a href="/">
+              <button
+                type="button"
+                class="bg-red-500 text-black p-2 ml-2 rounded"
+              >
+                Cancel
+              </button></a
+            >
+          </div>
+        </div>
       </form>
       
       <div class="chat-area col-8 d-flex flex-column d-none">
