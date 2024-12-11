@@ -121,6 +121,7 @@ $(() => {
   $createGroupButton.on("click", () => {
     $createGroupForm.removeClass("d-none");
     $chatPlaceholder.addClass("d-none");
+    $chatArea.addClass("d-none")
   })
   $createGroupForm.on("submit", (e: JQuery.TriggeredEvent)=> {
     e.preventDefault();
@@ -145,6 +146,7 @@ $(() => {
     $currentRoomDisplay.text(chatName);
     $chatArea.removeClass("d-none")
     $chatPlaceholder.addClass("d-none")
+    $createGroupForm.addClass("d-none")
     $messagesDiv.empty();
   });
 

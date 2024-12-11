@@ -126,6 +126,7 @@ $(function () {
     $createGroupButton.on("click", function () {
         $createGroupForm.removeClass("d-none");
         $chatPlaceholder.addClass("d-none");
+        $chatArea.addClass("d-none");
     });
     $createGroupForm.on("submit", function (e) {
         e.preventDefault();
@@ -147,6 +148,7 @@ $(function () {
         $currentRoomDisplay.text(chatName);
         $chatArea.removeClass("d-none");
         $chatPlaceholder.addClass("d-none");
+        $createGroupForm.addClass("d-none");
         $messagesDiv.empty();
     });
     $leaveRoomButton.on("click", function () {
