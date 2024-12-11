@@ -1,31 +1,35 @@
 import { Router } from "express";
 import {
-  createNewChatroom,
-  getChatroom,
-  listChatrooms,
-  joinChatroom,
-  leaveChatroom,
+  createNewGroup,
+  getGroup,
+  listGroups,
+  joinGroup,
+  leaveGroup,
   sendMessage,
+  getParticipants
 } from "../controllers/chatroomController";
 
 const router = Router();
 
-// Create a new chatroom
-router.post("/", createNewChatroom);
+// Create a new group
+router.post("/", createNewGroup);
 
-// Get all chatrooms
-router.get("/", listChatrooms);
+// Get all groups
+router.get("/", listGroups);
 
-// Get specific chatroom
-router.get("/:id", getChatroom);
+// Get specific group
+router.get("/:id", getGroup);
 
-// Join a chatroom
-router.post("/:id/join", joinChatroom);
+// Get group participants
+router.get("/:id/participants", getParticipants);
 
-// Leave a chatroom
-router.post("/:id/leave", leaveChatroom);
+// Join a group
+router.post("/:id/join", joinGroup);
 
-// Send a message in a chatroom
+// Leave a group
+router.post("/:id/leave", leaveGroup);
+
+// Send a message in a group
 router.post("/:id/messages", sendMessage);
 
 export default router;
