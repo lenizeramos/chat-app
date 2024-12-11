@@ -113,11 +113,29 @@ $(() => {
   const $joinRoomButton: JQuery = $(".joinRoomButton");
   const $leaveRoomButton: JQuery = $(".leaveRoomButton");
   const $currentRoomDisplay: JQuery = $(".currentRoom");
+  const $chatArea: JQuery = $(".chat-area");
+  const $chatPlaceholder: JQuery = $(".chat-placeholder");
+  const $createGroupButton: JQuery = $("#createGroupButton");
+  const $createGroupForm: JQuery = $("#createGroupForm");
+
+  $createGroupButton.on("click", () => {
+    $createGroupForm.removeClass("d-none");
+    $chatPlaceholder.addClass("d-none");
+  })
+  $createGroupForm.on("submit", (e: JQuery.TriggeredEvent)=> {
+    e.preventDefault();
+    $createGroupForm.addClass("d-none");
+    $chatPlaceholder.removeClass("d-none");
+  })
+    
 
   $joinRoomButton.on("click", (e: JQuery.TriggeredEvent) => {
     const target = $(e.currentTarget);
     const room = target.data("chat-id");
     const chatName = target.data("chat-name");
+    
+    $chatArea.removeClass("d-none")
+    $chatPlaceholder.addClass("d-none")
     console.log(room);
     if (currentRoom) {
       socket.emit("leaveRoom", currentRoom);
@@ -125,6 +143,8 @@ $(() => {
     socket.emit("joinRoom", room);
     currentRoom = room;
     $currentRoomDisplay.text(chatName);
+    $chatArea.removeClass("d-none")
+    $chatPlaceholder.addClass("d-none")
     $messagesDiv.empty();
   });
 
@@ -135,6 +155,8 @@ $(() => {
       $currentRoomDisplay.text("NO ROOMS");
       $messagesDiv.empty();
     }
+    $chatArea.addClass("d-none")
+    $chatPlaceholder.removeClass("d-none")
   });
 
   $sendButton.on("click", () => {

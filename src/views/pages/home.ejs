@@ -20,7 +20,11 @@
               placeholder="Search users..."
               autocomplete="off"
             />
-            <div id="searchResults" class="position-absolute w-100 bg-white border rounded shadow-sm d-none" style="z-index: 1000;"></div>
+            <div
+              id="searchResults"
+              class="position-absolute w-100 bg-white border rounded shadow-sm d-none"
+              style="z-index: 1000"
+            ></div>
           </form>
         </div>
         <h5 class="mb-3">Chats</h5>
@@ -35,11 +39,10 @@
             >
               <div
                 class="avatar rounded-circle text-white text-center me-3 d-flex align-items-center justify-content-center"
-                style="width: 40px; height: 40px; background-color: #007bff;"
+                style="width: 40px; height: 40px; background-color: #007bff"
               >
-                <% if (chat.name) { %>
-                  <%= chat.name.substring(0, 2).toUpperCase() %>
-                <% } %>
+                <% if (chat.name) { %> <%= chat.name.substring(0,
+                2).toUpperCase() %> <% } %>
               </div>
               <div>
                 <strong><%= chat.name %></strong>
@@ -51,7 +54,34 @@
         </div>
       </div>
 
-      <div class="chat-area col-8 d-flex flex-column">
+      <div
+        class="chat-placeholder col-8 d-flex flex-column align-items-center justify-content-center"
+      >
+        <div class="chat-placeholder-text rounded p-3">
+          <h2>Search for a user OR create a group</h2>
+          <button
+            id="createGroupButton"
+            class="bg-red-500 text-black p-2 ml-2 rounded"
+          >
+            Create a group
+          </button>
+        </div>
+      </div>
+      <form
+        id="createGroupForm"
+        class="col-8 d-flex flex-column align-items-center justify-content-start mt-3 d-none"
+      >
+      <div class="mb-3"><label for="groupName" class="form-label">Group name:</label>
+        <input type="text" name="groupName" id="groupName" class="form-control" required></div>
+        
+        <button type="submit"
+          class="bg-red-500 text-black p-2 ml-2 rounded"
+        >
+          Submit
+        </button>
+      </form>
+      
+      <div class="chat-area col-8 d-flex flex-column d-none">
         <div class="chat-header border-bottom p-3">
           <h5 class="m-0 currentRoom">Current room: <span>X</span></h5>
         </div>
@@ -72,11 +102,7 @@
             class="messageInput form-control me-2"
             placeholder="Type a message..."
           ></textarea>
-          <form
-            action=""
-            method="post"
-            enctype="multipart/form-data"
-          >
+          <form action="" method="post" enctype="multipart/form-data">
             <div class="m-3">
               <label for="attach-file" class="paperclip"
                 ><i class="fa-solid fa-paperclip"></i

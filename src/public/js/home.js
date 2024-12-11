@@ -119,10 +119,25 @@ $(function () {
     var $joinRoomButton = $(".joinRoomButton");
     var $leaveRoomButton = $(".leaveRoomButton");
     var $currentRoomDisplay = $(".currentRoom");
+    var $chatArea = $(".chat-area");
+    var $chatPlaceholder = $(".chat-placeholder");
+    var $createGroupButton = $("#createGroupButton");
+    var $createGroupForm = $("#createGroupForm");
+    $createGroupButton.on("click", function () {
+        $createGroupForm.removeClass("d-none");
+        $chatPlaceholder.addClass("d-none");
+    });
+    $createGroupForm.on("submit", function (e) {
+        e.preventDefault();
+        $createGroupForm.addClass("d-none");
+        $chatPlaceholder.removeClass("d-none");
+    });
     $joinRoomButton.on("click", function (e) {
         var target = $(e.currentTarget);
         var room = target.data("chat-id");
         var chatName = target.data("chat-name");
+        $chatArea.removeClass("d-none");
+        $chatPlaceholder.addClass("d-none");
         console.log(room);
         if (currentRoom) {
             socket.emit("leaveRoom", currentRoom);
@@ -130,6 +145,8 @@ $(function () {
         socket.emit("joinRoom", room);
         currentRoom = room;
         $currentRoomDisplay.text(chatName);
+        $chatArea.removeClass("d-none");
+        $chatPlaceholder.addClass("d-none");
         $messagesDiv.empty();
     });
     $leaveRoomButton.on("click", function () {
@@ -139,6 +156,8 @@ $(function () {
             $currentRoomDisplay.text("NO ROOMS");
             $messagesDiv.empty();
         }
+        $chatArea.addClass("d-none");
+        $chatPlaceholder.removeClass("d-none");
     });
     $sendButton.on("click", function () {
         var message = $messageInput.val();

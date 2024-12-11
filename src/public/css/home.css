@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
 nav {
-  background-color: #9A11BF;
+  background-color: #007BFF;
 }
 nav span {
   color: white !important;
@@ -137,7 +137,7 @@ body, input {
 }
 
 .btn {
-  background-color: #9A11BF;
+  background-color: #007BFF;
 }
 .btn:hover {
   background-color: #087F8C;
@@ -159,6 +159,19 @@ body, input {
 
 .paperclip {
   cursor: pointer;
+}
+
+.chat-placeholder {
+  background-image: url("");
+  background-color: #cccccc;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.chat-placeholder .chat-placeholder-text {
+  background-color: white;
+  text-align: center;
+  color: black;
 }
 
 /*# sourceMappingURL=home.css.map */
