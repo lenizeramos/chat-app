@@ -120,17 +120,35 @@ $(() => {
   const $contact: JQuery = $("#contact");
   const $chatRoom: JQuery = $("#chatRoom");
 
-  const windowWidth = $(window).width() || 0;
-
-  if (windowWidth <= 768) {
+  const isMobileView = () => ($(window).width() || 0) <= 768;
+  const showOnlyContact = () => {
     $chatRoom.addClass("d-none");
     $contact.removeClass("d-none");
+  };
+  const showOnlyChatRoom = () => {
+    $chatRoom.removeClass("d-none");
+    $contact.addClass("d-none");
+  };
+  const showContactAndChatRoom = () => {
+    $chatRoom.removeClass("d-none");
+    $contact.removeClass("d-none");
+  };
+
+  if (isMobileView()) {
+    showOnlyContact();
   }
 
+  $(window).on("resize", () => {
+    if (isMobileView()) {
+      showOnlyContact();
+    } else {
+      showContactAndChatRoom();
+    }
+  });
+
   $createGroupButton.on("click", () => {
-    if (windowWidth <= 768) {
-      $chatRoom.removeClass("d-none");
-      $contact.addClass("d-none");
+    if (isMobileView()) {
+      showOnlyChatRoom();
     }
 
     $createGroupForm.removeClass("d-none");
@@ -139,9 +157,8 @@ $(() => {
   });
   $createGroupForm.on("submit", (e: JQuery.TriggeredEvent) => {
     e.preventDefault();
-    if (windowWidth <= 768) {
-      $chatRoom.addClass("d-none");
-      $contact.removeClass("d-none");
+    if (isMobileView()) {
+      showOnlyContact();
     }
     $createGroupForm.addClass("d-none");
     $chatPlaceholder.removeClass("d-none");
@@ -152,9 +169,8 @@ $(() => {
     const room = target.data("chat-id");
     const chatName = target.data("chat-name");
 
-    if (windowWidth <= 768) {
-      $chatRoom.removeClass("d-none");
-      $contact.addClass("d-none");
+    if (isMobileView()) {
+      showOnlyChatRoom();
     }
 
     $chatArea.removeClass("d-none");
@@ -179,9 +195,8 @@ $(() => {
       $currentRoomDisplay.text("NO ROOMS");
       $messagesDiv.empty();
     }
-    if (windowWidth <= 768) {
-      $chatRoom.addClass("d-none");
-      $contact.removeClass("d-none");
+    if (isMobileView()) {
+      showOnlyContact();
     }
     $chatArea.addClass("d-none");
     $chatPlaceholder.removeClass("d-none");
