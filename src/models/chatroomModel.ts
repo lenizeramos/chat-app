@@ -1,7 +1,7 @@
 import { prisma } from "../prisma";
 
-export const createChatroom = async (name: string, creatorId: number) => {
-  const chatroom = await prisma.chat.create({
+export const createGroupChat = async (name: string, creatorId: number) => {
+  return await prisma.chat.create({
     data: {
       name,
       isGroup: true,
@@ -12,12 +12,14 @@ export const createChatroom = async (name: string, creatorId: number) => {
       },
     },
   });
-  return chatroom;
 };
 
-export const getChatroomById = async (chatroomId: number) => {
-  return await prisma.chat.findUnique({
-    where: { id: chatroomId },
+export const getGroupChatById = async (chatId: number) => {
+  return await prisma.chat.findFirst({
+    where: {
+      id: chatId,
+      isGroup: true,
+    },
     include: {
       participants: {
         include: {
@@ -36,45 +38,98 @@ export const getChatroomById = async (chatroomId: number) => {
   });
 };
 
-export const getAllChatrooms = async () => {
+export const getAllGroupChats = async () => {
   return await prisma.chat.findMany({
-    where: { isGroup: true },
+    where: {
+      isGroup: true,
+    },
     include: {
       participants: {
         include: {
           user: true,
         },
       },
-    },
-  });
-};
-
-export const addParticipantToChatroom = async (chatroomId: number, userId: number) => {
-  return await prisma.chatParticipant.create({
-    data: {
-      chatId: chatroomId,
-      userId: userId,
-    },
-  });
-};
-
-export const removeParticipantFromChatroom = async (chatroomId: number, userId: number) => {
-  return await prisma.chatParticipant.delete({
-    where: {
-      userId_chatId: {
-        userId: userId,
-        chatId: chatroomId,
+      messages: {
+        include: {
+          user: true,
+        },
+        take: 1,
+        orderBy: {
+          createdAt: 'desc',
+        },
       },
     },
   });
 };
 
-export const addMessageToChatroom = async (chatroomId: number, userId: number, content: string) => {
+export const addGroupParticipant = async (chatId: number, userId: number) => {
+  // Check if user is already in the group
+  const existingParticipant = await prisma.chatParticipant.findUnique({
+    where: {
+      userId_chatId: {
+        userId: userId,
+        chatId: chatId,
+      },
+    },
+  });
+
+  if (existingParticipant) {
+    throw new Error('User is already in this group');
+  }
+
+  return await prisma.chatParticipant.create({
+    data: {
+      chatId,
+      userId,
+    },
+    include: {
+      user: true,
+    },
+  });
+};
+
+export const removeGroupParticipant = async (chatId: number, userId: number) => {
+  return await prisma.chatParticipant.delete({
+    where: {
+      userId_chatId: {
+        userId: userId,
+        chatId: chatId,
+      },
+    },
+  });
+};
+
+export const addMessageToGroup = async (chatId: number, userId: number, content: string) => {
+  // Verify user is in the group
+  const participant = await prisma.chatParticipant.findUnique({
+    where: {
+      userId_chatId: {
+        userId: userId,
+        chatId: chatId,
+      },
+    },
+  });
+
+  if (!participant) {
+    throw new Error('User is not a member of this group');
+  }
+
   return await prisma.message.create({
     data: {
       content,
       userId,
-      chatId: chatroomId,
+      chatId,
+    },
+    include: {
+      user: true,
+    },
+  });
+};
+
+export const getGroupParticipants = async (chatId: number) => {
+  return await prisma.chatParticipant.findMany({
+    where: {
+      chatId: chatId,
     },
     include: {
       user: true,
