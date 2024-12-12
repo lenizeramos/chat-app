@@ -2,9 +2,28 @@ import { Response, Request, RequestHandler, NextFunction } from "express";
 import {
   addChatParticipant,
   createChat,
+  createGroupChat,
   doesDirectExist,
+  getAllUsers,
   getUserById,
 } from "../models/chatModel";
+
+export const getUsers: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({ error: "User not logged in." });
+    }
+
+    const users = await getAllUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch users" });
+  }
+};
 
 export const createDirect: RequestHandler = async (
   req: Request,
@@ -43,6 +62,34 @@ export const createDirect: RequestHandler = async (
     res.redirect("/");
   } catch (error) {
     res.status(400).json({ error: error });
+  }
+};
+
+export const createGroup: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({ error: "User not logged in." });
+    }
+
+    const { name, users } = req.body;
+
+    if (!name || !users || !Array.isArray(users) || users.length === 0) {
+      return res.status(400).json({ error: "Invalid group data provided." });
+    }
+
+    // Add the current user to the group
+    const allParticipants = [...users, req.session.user.id];
+
+    // Create the group chat with all participants
+    await createGroupChat(name, allParticipants);
+
+    res.redirect("/");
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create group chat" });
   }
 };
 

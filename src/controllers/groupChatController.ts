@@ -115,11 +115,6 @@ export const sendMessage = async (req: Request, res: Response, next: NextFunctio
       return res.status(400).json({ error: "Message content is required" });
     }
 
-    const group = await getGroupChatById(groupId);
-    if (!group) {
-      return res.status(404).json({ error: "Group not found" });
-    }
-
     const message = await addMessageToGroup(groupId, req.session.user.id, content);
     res.status(201).json(message);
   } catch (error) {

@@ -4,10 +4,8 @@
     <%- include("../partials/head.ejs", {title: "home", styles:
     "/css/home.css"}) %>
   </head>
-
   <body>
     <header><%- include("../partials/header.ejs", {page: "home"}) %></header>
-
     <div class="container-fluid vh-90 d-flex">
       <div id="contact" class=" col-4 border-end p-3">
         <div class="search-container position-relative mb-3">
@@ -58,7 +56,6 @@
           </ul>
         </div>
       </div>
-
       <div id="chatRoom"
         class="col-8 d-flex flex-column align-items-center justify-content-center"
       >
@@ -67,39 +64,53 @@
             <h2>Connect with your friends now!</h2>
           </div>
         </div>
-
         <form
           id="createGroupForm"
           class="w-100 d-flex flex-column align-items-center justify-content-start mt-3 d-none"
         >
-          <div class="mb-3">
+          <div class="mb-3 w-75">
             <label for="groupName" class="form-label">Group name:</label>
             <input
               type="text"
               name="groupName"
               id="groupName"
-              class="form-control"
+              class="form-control mb-3"
               required
             />
-            <div class="d-flex justify-content-center">
+            <label for="searchGroupUsers" class="form-label">Search users:</label>
+            <input
+              type="text"
+              id="searchGroupUsers"
+              class="form-control mb-3"
+              placeholder="Type to search users..."
+              autocomplete="off"
+            />
+            <div id="selectedUsersAvatars" class="selected-users-container mb-3">
+              <!-- Selected users' avatars will be displayed here -->
+            </div>
+            <div class="users-dropdown-container mb-3">
+              <label class="form-label">Available Users:</label>
+              <div id="usersDropdown" class="users-dropdown border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+                <!-- User list will be populated here -->
+              </div>
+            </div>
+            <div class="d-flex justify-content-center gap-2">
               <button
                 type="submit"
-                class="bg-red-500 text-black p-2 ml-2 rounded"
+                class="btn btn-primary"
               >
-                Submit
+                Finish
               </button>
-              <a href="/">
-                <button
-                  type="button"
-                  class="bg-red-500 text-black p-2 ml-2 rounded"
-                >
-                  Cancel
-                </button></a
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="cancelGroupButton"
               >
+                Cancel
+              </button>
             </div>
           </div>
         </form>
-
         <div class="chat-area w-100 d-flex flex-column d-none">
           <div class="chat-header border-bottom p-3">
             <h5 class="m-0 currentRoom">Current room: <span>X</span></h5>
@@ -107,14 +118,12 @@
           <button class="leaveRoomButton bg-red-500 text-black p-2 ml-2">
             Leave Room
           </button>
-
           <div class="chat-messages flex-grow-1 p-3 overflow-auto">
             <div class="message mb-3">
               <div class="message-text p-2 rounded"></div>
               <small class="text-muted messages"></small>
             </div>
           </div>
-
           <div class="messageForm p-3 border-top d-flex align-items-center">
             <textarea
               type="text"
@@ -139,11 +148,9 @@
         </div>
       </div>
     </div>
-
     <script>
       const usernameLogged = "<%= user.username %>";
     </script>
-
     <script src="/socket.io/socket.io.js"></script>
     <script defer src="/js/home.js"></script>
   </body>
