@@ -67,7 +67,11 @@ export const registerUser: RequestHandler = async (
     }
 
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password } = req.body as { 
+        username: string; 
+        email: string; 
+        password: string;
+      };
 
       // Validate required fields
       if (!username || !email || !password) {
@@ -92,12 +96,14 @@ export const registerUser: RequestHandler = async (
         ? `/uploads/avatars/${req.file.filename}`
         : null;
 
-      const user = await createUser({
+      const userData = {
         username,
         email,
         password,
         avatar: avatarPath,
-      });
+      };
+
+      const user = await createUser(userData);
 
       // Set session
       req.session.user = {
@@ -130,7 +136,7 @@ export const loginUser: RequestHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body as { email: string; password: string };
 
   if (req.session.user) {
     return res.status(200).json({ redirect: "/" });

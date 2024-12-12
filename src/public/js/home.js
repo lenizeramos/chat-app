@@ -159,11 +159,16 @@ $(function () {
     });
     $createGroupForm.on("submit", function (e) {
         e.preventDefault();
+        var groupName = $("#groupName").val();
+        if (groupName) {
+            postData("/groups", "POST", { name: groupName });
+        }
         if (isMobileView()) {
             showOnlyContact();
         }
         $createGroupForm.addClass("d-none");
         $chatPlaceholder.removeClass("d-none");
+        $("#groupName").val(''); // Clear the input
     });
     $joinRoomButton.on("click", function (e) {
         var target = $(e.currentTarget);
