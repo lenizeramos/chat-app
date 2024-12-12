@@ -41,7 +41,10 @@ $(() => {
   function updateSelectedUsersDisplay() {
     $selectedUsersAvatars.empty();
     selectedUsers.forEach(user => {
-      const initials = user.username.substring(0, 2).toUpperCase();
+      const initials = user.username.trim().substring(0, 2).toUpperCase();
+      console.log(initials, );
+      console.log("/" + user.username + "/");
+      
       const avatarHtml = user.avatar
         ? `<img src="${user.avatar}" class="avatar-img" alt="${user.username}'s avatar">`
         : `<div class="avatar-initials">${initials}</div>`;
@@ -65,7 +68,7 @@ $(() => {
         $usersDropdown.empty();
         users.forEach(user => {
           if (user.username !== usernameLogged) {
-            const initials = user.username.substring(0, 2).toUpperCase();
+            const initials = user.username.trim().substring(0, 2).toUpperCase();
             const avatarHtml = user.avatar
               ? `<img src="${user.avatar}" class="avatar-img" alt="${user.username}'s avatar">`
               : `<div class="avatar-initials">${initials}</div>`;

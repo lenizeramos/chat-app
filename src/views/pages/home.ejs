@@ -6,7 +6,7 @@
   </head>
   <body>
     <header><%- include("../partials/header.ejs", {page: "home"}) %></header>
-    <div class="container-fluid vh-90 d-flex">
+    <div class="container-fluid vh-100 d-flex">
       <div id="contact" class=" col-4 border-end p-3">
         <div class="search-container position-relative mb-3">
           <form action="/chat/direct" method="post" id="searchForm">
@@ -27,12 +27,12 @@
         </div>
         <button
           id="createGroupButton"
-          class="bg-red-500 text-black p-2 ml-2 rounded"
+          class="text-black p-2 ml-2 rounded"
         >
-          Create a group
+        <i class="fa-solid fa-user-group"></i> Create a group
         </button>
         <div class="chat-list">
-          <h5 class="mb-3">Chats</h5>
+          <h5 class="m-3 d-flex justify-content-center text-uppercase">Chats</h5>
           <ul class="list-group chat-items">
             <% chats.forEach(chat => { %>
             <li

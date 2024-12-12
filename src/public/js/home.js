@@ -61,7 +61,9 @@ $(function () {
     function updateSelectedUsersDisplay() {
         $selectedUsersAvatars.empty();
         selectedUsers.forEach(function (user) {
-            var initials = user.username.substring(0, 2).toUpperCase();
+            var initials = user.username.trim().substring(0, 2).toUpperCase();
+            console.log(initials);
+            console.log("/" + user.username + "/");
             var avatarHtml = user.avatar
                 ? "<img src=\"".concat(user.avatar, "\" class=\"avatar-img\" alt=\"").concat(user.username, "'s avatar\">")
                 : "<div class=\"avatar-initials\">".concat(initials, "</div>");
@@ -75,7 +77,7 @@ $(function () {
             $usersDropdown.empty();
             users.forEach(function (user) {
                 if (user.username !== usernameLogged) {
-                    var initials = user.username.substring(0, 2).toUpperCase();
+                    var initials = user.username.trim().substring(0, 2).toUpperCase();
                     var avatarHtml = user.avatar
                         ? "<img src=\"".concat(user.avatar, "\" class=\"avatar-img\" alt=\"").concat(user.username, "'s avatar\">")
                         : "<div class=\"avatar-initials\">".concat(initials, "</div>");
