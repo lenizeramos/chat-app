@@ -27,6 +27,13 @@ body, input {
   font-family: "Poppins", sans-serif;
 }
 
+.text-placeholder {
+  color: #aaa;
+  font-weight: 500;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
 .container-auth {
   position: relative;
   width: 100%;
