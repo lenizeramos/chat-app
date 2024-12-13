@@ -82,7 +82,7 @@ $(function () {
                         ? "<img src=\"".concat(user.avatar, "\" class=\"avatar-img\" alt=\"").concat(user.username, "'s avatar\">")
                         : "<div class=\"avatar-initials\">".concat(initials, "</div>");
                     var isSelected = selectedUsers.some(function (u) { return u.id === user.id; });
-                    var $userItem = $("\n              <div class=\"user-item ".concat(isSelected ? 'selected' : '', "\" data-user-id=\"").concat(user.id, "\">\n                <div class=\"avatar rounded-circle user-avatar\">\n                  ").concat(avatarHtml, "\n                </div>\n                <div class=\"user-info\">\n                  ").concat(user.username, "\n                </div>\n              </div>\n            "));
+                    var $userItem = $("\n              <div class=\"user-item ".concat(isSelected ? "selected" : "", "\" data-user-id=\"").concat(user.id, "\">\n                <div class=\"avatar rounded-circle user-avatar\">\n                  ").concat(avatarHtml, "\n                </div>\n                <div class=\"user-info\">\n                  ").concat(user.username, "\n                </div>\n              </div>\n            "));
                     $usersDropdown.append($userItem);
                 }
             });
@@ -142,7 +142,7 @@ $(function () {
         }
         var groupData = {
             name: groupName,
-            users: selectedUsers.map(function (u) { return u.id; })
+            users: selectedUsers.map(function (u) { return u.id; }),
         };
         postData("/chat/group", "POST", groupData);
     });
@@ -230,6 +230,7 @@ $(function () {
     var $createGroupButton = $("#createGroupButton");
     var $contact = $("#contact");
     var $chatRoom = $("#chatRoom");
+    var $chatItems = $("#chatItems");
     var isMobileView = function () { return ($(window).width() || 0) <= 768; };
     var showOnlyContact = function () {
         $chatRoom.addClass("d-none");
@@ -349,12 +350,15 @@ $(function () {
             displayMessage(username, content, imageUrl);
         });
     });
+    socket.on("notification", function () {
+        //$chatItems.empty();
+    });
     socket.on("message", function (_a) {
         var username = _a.username, message = _a.message, fileUrl = _a.fileUrl;
         displayMessage(username, message, fileUrl);
     });
     var displayMessage = function (username, message, fileUrl) {
-        var $messageElement = $("<div>").addClass("message-item d-flex align-items-start mb-2");
+        var $messageElement = $("<div>").addClass("message-item d-flex mb-2");
         var $messageContent;
         var initials = username.substring(0, 2).toUpperCase();
         var $avatar = $("<div>")
@@ -367,12 +371,14 @@ $(function () {
         })
             .text(initials);
         if (usernameLogged === username) {
+            $messageElement.addClass("justify-content-end");
             $messageContent = $("<div>")
                 .addClass("messages p-2 mb-2 message-logged-user rounded border")
-                .append($("<strong>").text(username + ": "))
+                //.append($("<strong>").text(username + ": "))
                 .append($("<span>").text(message));
         }
         else {
+            $messageElement.addClass("justify-content-start");
             $messageContent = $("<div>")
                 .addClass("messages p-2 mb-2 message-other-user rounded border")
                 .append($("<strong>").text(username + ": "))
@@ -396,8 +402,12 @@ $(function () {
                 $messageContent.append($fileLink);
             }
         }
-        $messageElement.append($avatar).append($messageContent);
+        if (usernameLogged === username) {
+            $messageElement.append($messageContent);
+        }
+        else {
+            $messageElement.append($avatar).append($messageContent);
+        }
         $messagesDiv.append($messageElement);
-        //$messagesDiv.scrollTop($messagesDiv[0].scrollHeight);
     };
 });
