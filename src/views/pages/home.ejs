@@ -6,7 +6,7 @@
   </head>
   <body>
     <header><%- include("../partials/header.ejs", {page: "home"}) %></header>
-    <div class="container-fluid vh-100 d-flex">
+    <div class="container-fluid d-flex container-display">
       <div id="contact" class=" col-4 border-end p-3">
         <div class="search-container position-relative mb-3">
           <form action="/chat/direct" method="post" id="searchForm">
@@ -57,7 +57,7 @@
         </div>
       </div>
       <div id="chatRoom"
-        class="col-8 d-flex flex-column align-items-center justify-content-center"
+        class="col-8 d-flex flex-column align-items-center justify-content-start"
       >
         <div class="chat-placeholder d-flex flex-column align-items-center justify-content-center w-100 h-100">
           <div class="chat-placeholder-text rounded p-3">
@@ -68,14 +68,14 @@
           id="createGroupForm"
           class="w-100 d-flex flex-column align-items-center justify-content-start mt-3 d-none"
         >
-          <div class="mb-3 w-75">
+          <div class="mb-3 w-75 " id="groupContainer">
             <label for="groupName" class="form-label">Group name:</label>
             <input
               type="text"
               name="groupName"
               id="groupName"
               class="form-control mb-3"
-              required
+              
             />
             <label for="searchGroupUsers" class="form-label">Search users:</label>
             <input

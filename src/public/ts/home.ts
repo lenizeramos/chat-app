@@ -138,15 +138,20 @@ $(() => {
 
   $createGroupForm.on("submit", function (e: JQuery.TriggeredEvent) {
     e.preventDefault();
+    $("#groupContainer .alert").remove();
     const groupName = $("#groupName").val()?.toString().trim();
 
     if (!groupName) {
-      alert("Please enter a group name");
+      $("#groupContainer").prepend(`
+          <div class="alert alert-danger" role="alert">Please enter a group name</div>
+        `);
       return;
     }
 
     if (selectedUsers.length === 0) {
-      alert("Please select at least one user for the group");
+      $("#groupContainer").prepend(`
+        <div class="alert alert-danger" role="alert">Please select at least one user for the group</div>
+      `);
       return;
     }
 

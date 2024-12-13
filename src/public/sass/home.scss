@@ -1,6 +1,12 @@
 @import "./variables";
 @import "./navbar";
 @import "./base";
+
+
+.container-display {
+height: calc(100vh - 72px);
+}
+
 // Search styles
 .search-result {
   cursor: pointer;
@@ -164,7 +170,7 @@
 }
 // Messages container
 .chat-messages {
-  height: calc(100vh - 250px);
+  height: 60vh;
   overflow-y: auto;
   padding: 1rem;
 }

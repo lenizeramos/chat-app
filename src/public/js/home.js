@@ -131,13 +131,14 @@ $(function () {
     $createGroupForm.on("submit", function (e) {
         var _a;
         e.preventDefault();
+        $("#groupContainer .alert").remove();
         var groupName = (_a = $("#groupName").val()) === null || _a === void 0 ? void 0 : _a.toString().trim();
         if (!groupName) {
-            alert("Please enter a group name");
+            $("#groupContainer").prepend("\n          <div class=\"alert alert-danger\" role=\"alert\">Please enter a group name</div>\n        ");
             return;
         }
         if (selectedUsers.length === 0) {
-            alert("Please select at least one user for the group");
+            $("#groupContainer").prepend("\n        <div class=\"alert alert-danger\" role=\"alert\">Please select at least one user for the group</div>\n      ");
             return;
         }
         var groupData = {
