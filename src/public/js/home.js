@@ -51,7 +51,111 @@ $(function () {
             },
         });
     };
-    // Search functionality
+    var selectedUsers = [];
+    var $searchGroupUsers = $("#searchGroupUsers");
+    var $usersDropdown = $("#usersDropdown");
+    var $selectedUsersAvatars = $("#selectedUsersAvatars");
+    var $createGroupForm = $("#createGroupForm");
+    var $cancelGroupButton = $("#cancelGroupButton");
+    function updateSelectedUsersDisplay() {
+        $selectedUsersAvatars.empty();
+        selectedUsers.forEach(function (user) {
+            var initials = user.username.trim().substring(0, 2).toUpperCase();
+            console.log(initials);
+            console.log("/" + user.username + "/");
+            var avatarHtml = user.avatar
+                ? "<img src=\"".concat(user.avatar, "\" class=\"avatar-img\" alt=\"").concat(user.username, "'s avatar\">")
+                : "<div class=\"avatar-initials\">".concat(initials, "</div>");
+            var $userAvatar = $("\n        <div class=\"selected-user-avatar\">\n          <div class=\"avatar rounded-circle\">\n            ".concat(avatarHtml, "\n          </div>\n          <div class=\"remove-user\" data-user-id=\"").concat(user.id, "\">\u00D7</div>\n        </div>\n      "));
+            $selectedUsersAvatars.append($userAvatar);
+        });
+    }
+    function loadAllUsers() {
+        $.get("/chat/users")
+            .done(function (users) {
+            $usersDropdown.empty();
+            users.forEach(function (user) {
+                if (user.username !== usernameLogged) {
+                    var initials = user.username.trim().substring(0, 2).toUpperCase();
+                    var avatarHtml = user.avatar
+                        ? "<img src=\"".concat(user.avatar, "\" class=\"avatar-img\" alt=\"").concat(user.username, "'s avatar\">")
+                        : "<div class=\"avatar-initials\">".concat(initials, "</div>");
+                    var isSelected = selectedUsers.some(function (u) { return u.id === user.id; });
+                    var $userItem = $("\n              <div class=\"user-item ".concat(isSelected ? "selected" : "", "\" data-user-id=\"").concat(user.id, "\">\n                <div class=\"avatar rounded-circle user-avatar\">\n                  ").concat(avatarHtml, "\n                </div>\n                <div class=\"user-info\">\n                  ").concat(user.username, "\n                </div>\n              </div>\n            "));
+                    $usersDropdown.append($userItem);
+                }
+            });
+        })
+            .fail(function (error) {
+            console.error("Failed to load users:", error);
+        });
+    }
+    $searchGroupUsers.on("focus", function () {
+        loadAllUsers();
+    });
+    $searchGroupUsers.on("input", function () {
+        var _a;
+        var searchTerm = ((_a = $(this).val()) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase()) || "";
+        $(".user-item").each(function () {
+            var username = $(this).find(".user-info").text().toLowerCase();
+            $(this).toggle(username.includes(searchTerm));
+        });
+    });
+    $(document).on("click", ".user-item", function () {
+        var userId = $(this).data("user-id");
+        var username = $(this).find(".user-info").text();
+        var avatar = $(this).find(".avatar-img").attr("src");
+        var userIndex = selectedUsers.findIndex(function (u) { return u.id === userId; });
+        if (userIndex === -1) {
+            selectedUsers.push({ id: userId, username: username, avatar: avatar });
+            $(this).addClass("selected");
+        }
+        else {
+            selectedUsers.splice(userIndex, 1);
+            $(this).removeClass("selected");
+        }
+        updateSelectedUsersDisplay();
+    });
+    $(document).on("click", ".remove-user", function (e) {
+        e.stopPropagation();
+        var userId = $(this).data("user-id");
+        var userIndex = selectedUsers.findIndex(function (u) { return u.id === userId; });
+        if (userIndex !== -1) {
+            selectedUsers.splice(userIndex, 1);
+            $(".user-item[data-user-id=\"".concat(userId, "\"]")).removeClass("selected");
+            updateSelectedUsersDisplay();
+        }
+    });
+    $createGroupForm.on("submit", function (e) {
+        var _a;
+        e.preventDefault();
+        $("#groupContainer .alert").remove();
+        var groupName = (_a = $("#groupName").val()) === null || _a === void 0 ? void 0 : _a.toString().trim();
+        if (!groupName) {
+            $("#groupContainer").prepend("\n          <div class=\"alert alert-danger\" role=\"alert\">Please enter a group name</div>\n        ");
+            return;
+        }
+        if (selectedUsers.length === 0) {
+            $("#groupContainer").prepend("\n        <div class=\"alert alert-danger\" role=\"alert\">Please select at least one user for the group</div>\n      ");
+            return;
+        }
+        var groupData = {
+            name: groupName,
+            users: selectedUsers.map(function (u) { return u.id; }),
+        };
+        postData("/chat/group", "POST", groupData);
+    });
+    $cancelGroupButton.on("click", function () {
+        if (isMobileView()) {
+            showOnlyContact();
+        }
+        selectedUsers.length = 0;
+        $createGroupForm.addClass("d-none");
+        $chatPlaceholder.removeClass("d-none");
+        $("#groupName").val("");
+        $searchGroupUsers.val("");
+        updateSelectedUsersDisplay();
+    });
     var $searchInput = $("#searchUserInput");
     var $searchResults = $("#searchResults");
     var searchTimeout;
@@ -59,7 +163,7 @@ $(function () {
     $searchInput.on("input", function () {
         var _a;
         clearTimeout(searchTimeout);
-        selectedUserId = null; // Clear selected user when input changes
+        selectedUserId = null;
         var searchTerm = ((_a = $(this).val()) === null || _a === void 0 ? void 0 : _a.toString().trim()) || "";
         if (searchTerm === "") {
             $searchResults.addClass("d-none").empty();
@@ -88,7 +192,6 @@ $(function () {
             });
         }, 300);
     });
-    // Handle search result selection
     $(document).on("click", ".search-result", function () {
         var userId = $(this).data("user-id");
         var username = $(this).data("username");
@@ -97,15 +200,12 @@ $(function () {
         $searchResults.addClass("d-none");
         postData("/chat/direct", "POST", { id: userId });
     });
-    // Handle search form submission
     $("#searchForm").on("submit", function (e) {
         e.preventDefault();
         if (selectedUserId) {
             postData("/chat/direct", "POST", { id: selectedUserId });
         }
-        // If no user is selected, do nothing
     });
-    // Hide search results when clicking outside
     $(document).on("click", function (e) {
         if (!$(e.target).closest(".search-container").length) {
             $searchResults.addClass("d-none");
@@ -122,9 +222,9 @@ $(function () {
     var $chatArea = $(".chat-area");
     var $chatPlaceholder = $(".chat-placeholder");
     var $createGroupButton = $("#createGroupButton");
-    var $createGroupForm = $("#createGroupForm");
     var $contact = $("#contact");
     var $chatRoom = $("#chatRoom");
+    var $chatItems = $("#chatItems");
     var isMobileView = function () { return ($(window).width() || 0) <= 768; };
     var showOnlyContact = function () {
         $chatRoom.addClass("d-none");
@@ -156,19 +256,7 @@ $(function () {
         $createGroupForm.removeClass("d-none");
         $chatPlaceholder.addClass("d-none");
         $chatArea.addClass("d-none");
-    });
-    $createGroupForm.on("submit", function (e) {
-        e.preventDefault();
-        var groupName = $("#groupName").val();
-        if (groupName) {
-            postData("/groups", "POST", { name: groupName });
-        }
-        if (isMobileView()) {
-            showOnlyContact();
-        }
-        $createGroupForm.addClass("d-none");
-        $chatPlaceholder.removeClass("d-none");
-        $("#groupName").val(''); // Clear the input
+        loadAllUsers();
     });
     $joinRoomButton.on("click", function (e) {
         var target = $(e.currentTarget);
@@ -256,12 +344,15 @@ $(function () {
             displayMessage(username, content, imageUrl);
         });
     });
+    socket.on("notification", function () {
+        //$chatItems.empty();
+    });
     socket.on("message", function (_a) {
         var username = _a.username, message = _a.message, fileUrl = _a.fileUrl;
         displayMessage(username, message, fileUrl);
     });
     var displayMessage = function (username, message, fileUrl) {
-        var $messageElement = $("<div>").addClass("message-item d-flex align-items-start mb-2");
+        var $messageElement = $("<div>").addClass("message-item d-flex mb-2");
         var $messageContent;
         var initials = username.substring(0, 2).toUpperCase();
         var $avatar = $("<div>")
@@ -274,12 +365,14 @@ $(function () {
         })
             .text(initials);
         if (usernameLogged === username) {
+            $messageElement.addClass("justify-content-end");
             $messageContent = $("<div>")
                 .addClass("messages p-2 mb-2 message-logged-user rounded border")
-                .append($("<strong>").text(username + ": "))
+                //.append($("<strong>").text(username + ": "))
                 .append($("<span>").text(message));
         }
         else {
+            $messageElement.addClass("justify-content-start");
             $messageContent = $("<div>")
                 .addClass("messages p-2 mb-2 message-other-user rounded border")
                 .append($("<strong>").text(username + ": "))
@@ -303,8 +396,12 @@ $(function () {
                 $messageContent.append($fileLink);
             }
         }
-        $messageElement.append($avatar).append($messageContent);
+        if (usernameLogged === username) {
+            $messageElement.append($messageContent);
+        }
+        else {
+            $messageElement.append($avatar).append($messageContent);
+        }
         $messagesDiv.append($messageElement);
-        //$messagesDiv.scrollTop($messagesDiv[0].scrollHeight);
     };
 });

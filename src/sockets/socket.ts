@@ -2,14 +2,19 @@ import { Server } from "socket.io";
 import { Server as HttpServer } from "http";
 import { createMessage, getMessageByChat } from "../models/messageModel";
 import { getUserByUsername } from "../models/userModel";
+import { getGroupParticipants } from "../models/groupChatModel";
 
 let io: Server;
 
 export const initSocket = (server: HttpServer) => {
   io = new Server(server);
 
-  io.on("connection", (socket) => {
+  io.on("connection", async (socket) => {
     const username = socket.handshake.query.username as string;
+
+    socket.join(username);
+    //const user = await getUserByUsername(username);
+    //loggedUser.push(user)
 
     socket.on("joinRoom", async (room) => {
       socket.join(room);
@@ -39,6 +44,12 @@ export const initSocket = (server: HttpServer) => {
       }
 
       io.to(room).emit("message", { username, message, fileUrl });
+
+      (await getGroupParticipants(room))
+        .filter((u) => u.user.id != user?.id)
+        .forEach((u) => {
+          io.to(u.user.username).emit("notification");
+        });
     });
 
     socket.on("disconnect", () => {

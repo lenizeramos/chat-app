@@ -16,7 +16,7 @@ export const getIndex = async (req: Request, res: Response) => {
 export const searchUsers = async (req: Request, res: Response) => {
   try {
     const searchTerm = req.query.search as string;
-    
+
     if (!searchTerm) {
       return res.json([]);
     }
@@ -25,17 +25,17 @@ export const searchUsers = async (req: Request, res: Response) => {
       where: {
         username: {
           contains: searchTerm,
-          mode: 'insensitive'
+          mode: "insensitive",
         },
         NOT: {
-          id: req.session.user?.id // Exclude current user
-        }
+          id: req.session.user?.id,
+        },
       },
       select: {
         id: true,
-        username: true
+        username: true,
       },
-      take: 5 // Limit results
+      take: 5,
     });
 
     res.json(users);

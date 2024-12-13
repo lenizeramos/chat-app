@@ -81,10 +81,8 @@ export const createGroup: RequestHandler = async (
       return res.status(400).json({ error: "Invalid group data provided." });
     }
 
-    // Add the current user to the group
     const allParticipants = [...users, req.session.user.id];
 
-    // Create the group chat with all participants
     await createGroupChat(name, allParticipants);
 
     res.redirect("/");

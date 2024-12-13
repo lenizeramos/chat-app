@@ -30,7 +30,6 @@ $(() => {
     });
   };
 
-  // Group creation functionality
   const selectedUsers: User[] = [];
   const $searchGroupUsers = $("#searchGroupUsers");
   const $usersDropdown = $("#usersDropdown");
@@ -40,8 +39,11 @@ $(() => {
 
   function updateSelectedUsersDisplay() {
     $selectedUsersAvatars.empty();
-    selectedUsers.forEach(user => {
-      const initials = user.username.substring(0, 2).toUpperCase();
+    selectedUsers.forEach((user) => {
+      const initials = user.username.trim().substring(0, 2).toUpperCase();
+      console.log(initials);
+      console.log("/" + user.username + "/");
+
       const avatarHtml = user.avatar
         ? `<img src="${user.avatar}" class="avatar-img" alt="${user.username}'s avatar">`
         : `<div class="avatar-initials">${initials}</div>`;
@@ -63,16 +65,18 @@ $(() => {
     $.get("/chat/users")
       .done((users: User[]) => {
         $usersDropdown.empty();
-        users.forEach(user => {
+        users.forEach((user) => {
           if (user.username !== usernameLogged) {
-            const initials = user.username.substring(0, 2).toUpperCase();
+            const initials = user.username.trim().substring(0, 2).toUpperCase();
             const avatarHtml = user.avatar
               ? `<img src="${user.avatar}" class="avatar-img" alt="${user.username}'s avatar">`
               : `<div class="avatar-initials">${initials}</div>`;
 
-            const isSelected = selectedUsers.some(u => u.id === user.id);
+            const isSelected = selectedUsers.some((u) => u.id === user.id);
             const $userItem = $(`
-              <div class="user-item ${isSelected ? 'selected' : ''}" data-user-id="${user.id}">
+              <div class="user-item ${
+                isSelected ? "selected" : ""
+              }" data-user-id="${user.id}">
                 <div class="avatar rounded-circle user-avatar">
                   ${avatarHtml}
                 </div>
@@ -85,30 +89,29 @@ $(() => {
           }
         });
       })
-      .fail(error => {
+      .fail((error) => {
         console.error("Failed to load users:", error);
       });
   }
 
-  // Load users when clicking on search input
-  $searchGroupUsers.on("focus", function() {
+  $searchGroupUsers.on("focus", function () {
     loadAllUsers();
   });
 
-  $searchGroupUsers.on("input", function(this: HTMLInputElement) {
+  $searchGroupUsers.on("input", function (this: HTMLInputElement) {
     const searchTerm = $(this).val()?.toString().toLowerCase() || "";
-    $(".user-item").each(function() {
+    $(".user-item").each(function () {
       const username = $(this).find(".user-info").text().toLowerCase();
       $(this).toggle(username.includes(searchTerm));
     });
   });
 
-  $(document).on("click", ".user-item", function() {
+  $(document).on("click", ".user-item", function () {
     const userId = $(this).data("user-id");
     const username = $(this).find(".user-info").text();
     const avatar = $(this).find(".avatar-img").attr("src");
 
-    const userIndex = selectedUsers.findIndex(u => u.id === userId);
+    const userIndex = selectedUsers.findIndex((u) => u.id === userId);
     if (userIndex === -1) {
       selectedUsers.push({ id: userId, username, avatar });
       $(this).addClass("selected");
@@ -120,10 +123,10 @@ $(() => {
     updateSelectedUsersDisplay();
   });
 
-  $(document).on("click", ".remove-user", function(e) {
+  $(document).on("click", ".remove-user", function (e) {
     e.stopPropagation();
     const userId = $(this).data("user-id");
-    const userIndex = selectedUsers.findIndex(u => u.id === userId);
+    const userIndex = selectedUsers.findIndex((u) => u.id === userId);
     if (userIndex !== -1) {
       selectedUsers.splice(userIndex, 1);
       $(`.user-item[data-user-id="${userId}"]`).removeClass("selected");
@@ -131,23 +134,28 @@ $(() => {
     }
   });
 
-  $createGroupForm.on("submit", function(e: JQuery.TriggeredEvent) {
+  $createGroupForm.on("submit", function (e: JQuery.TriggeredEvent) {
     e.preventDefault();
+    $("#groupContainer .alert").remove();
     const groupName = $("#groupName").val()?.toString().trim();
-    
+
     if (!groupName) {
-      alert("Please enter a group name");
+      $("#groupContainer").prepend(`
+          <div class="alert alert-danger" role="alert">Please enter a group name</div>
+        `);
       return;
     }
 
     if (selectedUsers.length === 0) {
-      alert("Please select at least one user for the group");
+      $("#groupContainer").prepend(`
+        <div class="alert alert-danger" role="alert">Please select at least one user for the group</div>
+      `);
       return;
     }
 
     const groupData = {
       name: groupName,
-      users: selectedUsers.map(u => u.id)
+      users: selectedUsers.map((u) => u.id),
     };
 
     postData("/chat/group", "POST", groupData);
@@ -165,7 +173,6 @@ $(() => {
     updateSelectedUsersDisplay();
   });
 
-  // Search functionality
   const $searchInput: JQuery = $("#searchUserInput");
   const $searchResults: JQuery = $("#searchResults");
   let searchTimeout: NodeJS.Timeout;
@@ -173,7 +180,7 @@ $(() => {
 
   $searchInput.on("input", function (this: HTMLInputElement) {
     clearTimeout(searchTimeout);
-    selectedUserId = null; // Clear selected user when input changes
+    selectedUserId = null;
     const searchTerm: string = $(this).val()?.toString().trim() || "";
 
     if (searchTerm === "") {
@@ -214,7 +221,6 @@ $(() => {
     }, 300);
   });
 
-  // Handle search result selection
   $(document).on("click", ".search-result", function (this: HTMLElement) {
     const userId = $(this).data("user-id");
     const username = $(this).data("username");
@@ -224,16 +230,14 @@ $(() => {
     postData("/chat/direct", "POST", { id: userId });
   });
 
-  // Handle search form submission
   $("#searchForm").on("submit", function (e: JQuery.TriggeredEvent) {
     e.preventDefault();
     if (selectedUserId) {
       postData("/chat/direct", "POST", { id: selectedUserId });
     }
-    // If no user is selected, do nothing
+    
   });
 
-  // Hide search results when clicking outside
   $(document).on("click", function (e: JQuery.TriggeredEvent) {
     if (!$(e.target).closest(".search-container").length) {
       $searchResults.addClass("d-none");
@@ -253,6 +257,7 @@ $(() => {
   const $createGroupButton: JQuery = $("#createGroupButton");
   const $contact: JQuery = $("#contact");
   const $chatRoom: JQuery = $("#chatRoom");
+  const $chatItems: JQuery = $("#chatItems");
 
   const isMobileView = () => ($(window).width() || 0) <= 768;
   const showOnlyContact = () => {
@@ -288,7 +293,7 @@ $(() => {
     $createGroupForm.removeClass("d-none");
     $chatPlaceholder.addClass("d-none");
     $chatArea.addClass("d-none");
-    loadAllUsers(); // Load users when opening the form
+    loadAllUsers();
   });
 
   $joinRoomButton.on("click", (e: JQuery.TriggeredEvent) => {
@@ -375,6 +380,10 @@ $(() => {
     }
   );
 
+  socket.on("notification", () => {
+    //$chatItems.empty();
+  });
+
   socket.on(
     "message",
     ({
@@ -395,9 +404,7 @@ $(() => {
     message: string,
     fileUrl?: string
   ) => {
-    const $messageElement = $("<div>").addClass(
-      "message-item d-flex align-items-start mb-2"
-    );
+    const $messageElement = $("<div>").addClass("message-item d-flex mb-2");
     let $messageContent;
     const initials = username.substring(0, 2).toUpperCase();
 
@@ -414,11 +421,13 @@ $(() => {
       .text(initials);
 
     if (usernameLogged === username) {
+      $messageElement.addClass("justify-content-end");
       $messageContent = $("<div>")
         .addClass("messages p-2 mb-2 message-logged-user rounded border")
-        .append($("<strong>").text(username + ": "))
+        //.append($("<strong>").text(username + ": "))
         .append($("<span>").text(message));
     } else {
+      $messageElement.addClass("justify-content-start");
       $messageContent = $("<div>")
         .addClass("messages p-2 mb-2 message-other-user rounded border")
         .append($("<strong>").text(username + ": "))
@@ -443,9 +452,12 @@ $(() => {
         $messageContent.append($fileLink);
       }
     }
-    $messageElement.append($avatar).append($messageContent);
-    $messagesDiv.append($messageElement);
 
-    //$messagesDiv.scrollTop($messagesDiv[0].scrollHeight);
+    if (usernameLogged === username) {
+      $messageElement.append($messageContent);
+    } else {
+      $messageElement.append($avatar).append($messageContent);
+    }
+    $messagesDiv.append($messageElement);
   };
 });
