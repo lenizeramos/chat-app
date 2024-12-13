@@ -4,7 +4,6 @@ import multer from "multer";
 import path from "path";
 import { getAuthUserByEmail, createUser } from "../models/userModel";
 
-// Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, "../public/uploads/avatars"));
@@ -18,7 +17,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
+    fileSize: 5 * 1024 * 1024,
   },
   fileFilter: function (req, file, cb) {
     const filetypes = /jpeg|jpg|png/;
@@ -67,31 +66,27 @@ export const registerUser: RequestHandler = async (
     }
 
     try {
-      const { username, email, password } = req.body as { 
-        username: string; 
-        email: string; 
+      const { username, email, password } = req.body as {
+        username: string;
+        email: string;
         password: string;
       };
 
-      // Validate required fields
       if (!username || !email || !password) {
         return res.status(400).json({ error: "All fields are required." });
       }
 
-      // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ error: "Invalid email format." });
       }
 
-      // Validate password strength
       if (password.length < 6) {
         return res
           .status(400)
           .json({ error: "Password must be at least 6 characters long." });
       }
 
-      // Add avatar path if file was uploaded
       const avatarPath = req.file
         ? `/uploads/avatars/${req.file.filename}`
         : null;
@@ -105,14 +100,12 @@ export const registerUser: RequestHandler = async (
 
       const user = await createUser(userData);
 
-      // Set session
       req.session.user = {
         username: user.username,
         email: user.email,
         id: user.id,
       };
 
-      // Return success response
       return res.status(200).json({
         success: true,
         message: "Registration successful",
@@ -143,7 +136,6 @@ export const loginUser: RequestHandler = async (
   }
 
   try {
-    // Validate required fields
     if (!email || !password) {
       return res
         .status(400)
@@ -162,14 +154,12 @@ export const loginUser: RequestHandler = async (
       return res.status(401).json({ error: "Invalid email or password." });
     }
 
-    // Set session
     req.session.user = {
       username: user.username,
       email: user.email,
       id: user.id,
     };
 
-    // Return success response
     return res.status(200).json({
       success: true,
       message: "Login successful",

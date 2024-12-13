@@ -31,7 +31,7 @@ export const getGroupChatById = async (chatId: number) => {
           user: true,
         },
         orderBy: {
-          createdAt: 'asc',
+          createdAt: "asc",
         },
       },
     },
@@ -55,7 +55,7 @@ export const getAllGroupChats = async () => {
         },
         take: 1,
         orderBy: {
-          createdAt: 'desc',
+          createdAt: "desc",
         },
       },
     },
@@ -63,7 +63,6 @@ export const getAllGroupChats = async () => {
 };
 
 export const addGroupParticipant = async (chatId: number, userId: number) => {
-  // Check if user is already in the group
   const existingParticipant = await prisma.chatParticipant.findUnique({
     where: {
       userId_chatId: {
@@ -74,7 +73,7 @@ export const addGroupParticipant = async (chatId: number, userId: number) => {
   });
 
   if (existingParticipant) {
-    throw new Error('User is already in this group');
+    throw new Error("User is already in this group");
   }
 
   return await prisma.chatParticipant.create({
@@ -88,7 +87,10 @@ export const addGroupParticipant = async (chatId: number, userId: number) => {
   });
 };
 
-export const removeGroupParticipant = async (chatId: number, userId: number) => {
+export const removeGroupParticipant = async (
+  chatId: number,
+  userId: number
+) => {
   return await prisma.chatParticipant.delete({
     where: {
       userId_chatId: {
@@ -99,8 +101,11 @@ export const removeGroupParticipant = async (chatId: number, userId: number) => 
   });
 };
 
-export const addMessageToGroup = async (chatId: number, userId: number, content: string) => {
-  // Verify user is in the group
+export const addMessageToGroup = async (
+  chatId: number,
+  userId: number,
+  content: string
+) => {
   const participant = await prisma.chatParticipant.findUnique({
     where: {
       userId_chatId: {
@@ -111,7 +116,7 @@ export const addMessageToGroup = async (chatId: number, userId: number, content:
   });
 
   if (!participant) {
-    throw new Error('User is not a member of this group');
+    throw new Error("User is not a member of this group");
   }
 
   return await prisma.message.create({

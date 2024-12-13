@@ -30,7 +30,6 @@ $(() => {
     });
   };
 
-  // Group creation functionality
   const selectedUsers: User[] = [];
   const $searchGroupUsers = $("#searchGroupUsers");
   const $usersDropdown = $("#usersDropdown");
@@ -95,7 +94,6 @@ $(() => {
       });
   }
 
-  // Load users when clicking on search input
   $searchGroupUsers.on("focus", function () {
     loadAllUsers();
   });
@@ -175,7 +173,6 @@ $(() => {
     updateSelectedUsersDisplay();
   });
 
-  // Search functionality
   const $searchInput: JQuery = $("#searchUserInput");
   const $searchResults: JQuery = $("#searchResults");
   let searchTimeout: NodeJS.Timeout;
@@ -183,7 +180,7 @@ $(() => {
 
   $searchInput.on("input", function (this: HTMLInputElement) {
     clearTimeout(searchTimeout);
-    selectedUserId = null; // Clear selected user when input changes
+    selectedUserId = null;
     const searchTerm: string = $(this).val()?.toString().trim() || "";
 
     if (searchTerm === "") {
@@ -224,7 +221,6 @@ $(() => {
     }, 300);
   });
 
-  // Handle search result selection
   $(document).on("click", ".search-result", function (this: HTMLElement) {
     const userId = $(this).data("user-id");
     const username = $(this).data("username");
@@ -234,16 +230,14 @@ $(() => {
     postData("/chat/direct", "POST", { id: userId });
   });
 
-  // Handle search form submission
   $("#searchForm").on("submit", function (e: JQuery.TriggeredEvent) {
     e.preventDefault();
     if (selectedUserId) {
       postData("/chat/direct", "POST", { id: selectedUserId });
     }
-    // If no user is selected, do nothing
+    
   });
 
-  // Hide search results when clicking outside
   $(document).on("click", function (e: JQuery.TriggeredEvent) {
     if (!$(e.target).closest(".search-container").length) {
       $searchResults.addClass("d-none");
@@ -299,7 +293,7 @@ $(() => {
     $createGroupForm.removeClass("d-none");
     $chatPlaceholder.addClass("d-none");
     $chatArea.addClass("d-none");
-    loadAllUsers(); // Load users when opening the form
+    loadAllUsers();
   });
 
   $joinRoomButton.on("click", (e: JQuery.TriggeredEvent) => {

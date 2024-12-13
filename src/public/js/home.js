@@ -51,7 +51,6 @@ $(function () {
             },
         });
     };
-    // Group creation functionality
     var selectedUsers = [];
     var $searchGroupUsers = $("#searchGroupUsers");
     var $usersDropdown = $("#usersDropdown");
@@ -91,7 +90,6 @@ $(function () {
             console.error("Failed to load users:", error);
         });
     }
-    // Load users when clicking on search input
     $searchGroupUsers.on("focus", function () {
         loadAllUsers();
     });
@@ -158,7 +156,6 @@ $(function () {
         $searchGroupUsers.val("");
         updateSelectedUsersDisplay();
     });
-    // Search functionality
     var $searchInput = $("#searchUserInput");
     var $searchResults = $("#searchResults");
     var searchTimeout;
@@ -166,7 +163,7 @@ $(function () {
     $searchInput.on("input", function () {
         var _a;
         clearTimeout(searchTimeout);
-        selectedUserId = null; // Clear selected user when input changes
+        selectedUserId = null;
         var searchTerm = ((_a = $(this).val()) === null || _a === void 0 ? void 0 : _a.toString().trim()) || "";
         if (searchTerm === "") {
             $searchResults.addClass("d-none").empty();
@@ -195,7 +192,6 @@ $(function () {
             });
         }, 300);
     });
-    // Handle search result selection
     $(document).on("click", ".search-result", function () {
         var userId = $(this).data("user-id");
         var username = $(this).data("username");
@@ -204,15 +200,12 @@ $(function () {
         $searchResults.addClass("d-none");
         postData("/chat/direct", "POST", { id: userId });
     });
-    // Handle search form submission
     $("#searchForm").on("submit", function (e) {
         e.preventDefault();
         if (selectedUserId) {
             postData("/chat/direct", "POST", { id: selectedUserId });
         }
-        // If no user is selected, do nothing
     });
-    // Hide search results when clicking outside
     $(document).on("click", function (e) {
         if (!$(e.target).closest(".search-container").length) {
             $searchResults.addClass("d-none");
@@ -263,7 +256,7 @@ $(function () {
         $createGroupForm.removeClass("d-none");
         $chatPlaceholder.addClass("d-none");
         $chatArea.addClass("d-none");
-        loadAllUsers(); // Load users when opening the form
+        loadAllUsers();
     });
     $joinRoomButton.on("click", function (e) {
         var target = $(e.currentTarget);

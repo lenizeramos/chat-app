@@ -6,8 +6,6 @@ import { getGroupParticipants } from "../models/groupChatModel";
 
 let io: Server;
 
-//const loggedUser = []
-
 export const initSocket = (server: HttpServer) => {
   io = new Server(server);
 
