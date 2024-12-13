@@ -29,9 +29,10 @@ $(function () {
                         window.location.href = "/";
                     }
                 },
-                error: function () {
+                error: function (xhr, status, error) {
+                    var _a;
                     $(".sign-in-form .alert").remove();
-                    $(".sign-in-form").prepend("\n              <div class=\"alert alert-danger\" role=\"alert\">Unexpected error</div>\n            ");
+                    $(".sign-in-form").prepend("\n              <div class=\"alert alert-danger\" role=\"alert\">".concat(((_a = xhr.responseJSON) === null || _a === void 0 ? void 0 : _a.error) || "Unexpected error occurred", "</div>\n            "));
                 }
             });
         };
@@ -53,9 +54,10 @@ $(function () {
                         window.location.href = "/";
                     }
                 },
-                error: function () {
+                error: function (xhr, status, error) {
+                    var _a;
                     $(".sign-up-form .alert").remove();
-                    $(".sign-up-form").prepend("\n              <div class=\"alert alert-danger\" role=\"alert\">Unexpected error</div>\n            ");
+                    $(".sign-up-form").prepend("\n              <div class=\"alert alert-danger\" role=\"alert\">".concat(((_a = xhr.responseJSON) === null || _a === void 0 ? void 0 : _a.error) || "Unexpected error occurred", "</div>\n            "));
                 }
             });
         };

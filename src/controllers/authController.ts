@@ -76,7 +76,7 @@ export const registerUser: RequestHandler = async (
         return res.status(400).json({ error: "All fields are required." });
       }
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /(^)(([A-Za-z0-9!#-&*--\/=?^_`{|}~][.]{0,1})+@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)*\.[A-Za-z0-9]{2,})($)/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ error: "Invalid email format." });
       }

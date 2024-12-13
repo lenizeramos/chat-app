@@ -31,10 +31,10 @@ $(() => {
               window.location.href = "/";
             }
           },
-          error: () => {
+          error: (xhr, status, error) => {
             $(".sign-in-form .alert").remove();
             $(".sign-in-form").prepend(`
-              <div class="alert alert-danger" role="alert">Unexpected error</div>
+              <div class="alert alert-danger" role="alert">${xhr.responseJSON?.error || "Unexpected error occurred"}</div>
             `);
           }
         });
@@ -61,10 +61,10 @@ $(() => {
               window.location.href = "/";
             }
           },
-          error: () => {
+          error: (xhr, status, error) => {
             $(".sign-up-form .alert").remove();
             $(".sign-up-form").prepend(`
-              <div class="alert alert-danger" role="alert">Unexpected error</div>
+              <div class="alert alert-danger" role="alert">${xhr.responseJSON?.error || "Unexpected error occurred"}</div>
             `);
           }
         });
