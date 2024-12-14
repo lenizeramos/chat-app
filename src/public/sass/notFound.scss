@@ -1,0 +1,17 @@
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: #495057;
+  .error-container {
+    text-align: center;
+  }
+  .emoji {
+    font-size: 8rem;
+  }
+  .btn-home {
+    border-radius: 20px;
+  }
+}

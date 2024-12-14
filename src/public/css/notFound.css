@@ -1,0 +1,19 @@
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: #495057;
+}
+body .error-container {
+  text-align: center;
+}
+body .emoji {
+  font-size: 8rem;
+}
+body .btn-home {
+  border-radius: 20px;
+}
+
+/*# sourceMappingURL=notFound.css.map */
