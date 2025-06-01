@@ -53,10 +53,6 @@ This project is a real-time chat application that allows users to:
 
 The application should now be running at `http://localhost:8080`.
 
-### Live Demo
-
-The application is currently live and accessible at: [http://34.221.97.64/](http://34.221.97.64/)
-
 ## Endpoints
 
 ### Authentication Routes
